@@ -1,0 +1,254 @@
+{
+  "episode_id": "pilot-chimneys",
+  "title": "Why Victorian Children Were Forced to Climb Chimneys",
+  "central_question": "Why did Britain keep sending children up chimneys for nearly a hundred years after it first tried to stop them?",
+  "total_words": 764,
+  "acts": [
+    {
+      "act_number": 1,
+      "act_name": "Cold Open",
+      "start_s": 0.0,
+      "end_s": 20.0,
+      "narration": "In February 1875, a twelve-year-old boy was sent up a chimney in Cambridge. His name was George Brewster. He became wedged in a narrow flue inside a hotel wall, and rescuers had to dismantle the brickwork to reach him. By then, he was dead. [S4]",
+      "on_screen_text": [
+        {
+          "text": "CAMBRIDGE, FEBRUARY 1875",
+          "start_s": 1.0,
+          "end_s": 6.0
+        },
+        {
+          "text": "HE DID NOT COME OUT",
+          "start_s": 14.0,
+          "end_s": 19.5
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "By then, he was dead.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 2,
+      "act_name": "Context",
+      "start_s": 20.0,
+      "end_s": 60.0,
+      "narration": "Brewster was a climbing boy — one of the children sent crawling through the flues of Victorian Britain. The trade had already been condemned on paper for a century. In 1775, the surgeon Percivall Pott showed that soot was causing a cancer unique to sweeps. [S5] In 1788, Parliament set a minimum age of eight for climbing boys. [S4] In 1840, it made it illegal for anyone under twenty-one to go up a chimney at all. [S3] Each law, on paper, should have ended the practice. Yet boys were still climbing in the 1870s. [S4] So here is the central question: why did Britain keep sending children up chimneys for nearly a hundred years after it first tried to stop them?",
+      "on_screen_text": [
+        {
+          "text": "1775: SOOT CAUSES CANCER",
+          "start_s": 30.0,
+          "end_s": 34.0
+        },
+        {
+          "text": "1788: MINIMUM AGE EIGHT",
+          "start_s": 36.0,
+          "end_s": 40.0
+        },
+        {
+          "text": "1840: UNDER 21 BANNED",
+          "start_s": 42.0,
+          "end_s": 46.0
+        },
+        {
+          "text": "SO WHY DID IT CONTINUE?",
+          "start_s": 52.0,
+          "end_s": 58.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "soot was causing a cancer unique to sweeps.",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "a minimum age of eight for climbing boys.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "illegal for anyone under twenty-one to go up a chimney",
+          "source_id": "S3"
+        },
+        {
+          "text_span": "boys were still climbing in the 1870s.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 3,
+      "act_name": "How It Worked",
+      "start_s": 60.0,
+      "end_s": 150.0,
+      "narration": "It began with an apprenticeship. Boys were taken young — often from workhouses, or from families too poor to refuse — and bound to a master sweep, who controlled their labour and their climb. [S4] The tools were simple: a scraper, a stiff brush, a metal weight on a short line. But the machine was the house itself — flues of brick and clay, built with tight corners to hold heat, some barely wider than the shoulders of the child sent into them. [S4] A boy worked stripped to the skin, so his clothes would not catch, and climbed on elbows and knees, driving his back and shoulders against the brick to scrape soot from the walls. [S4] At the top, a second sweep might wait to lift him out of the chimney pot. Below, the master caught the falling soot in a sack — soot that was sold, by weight, to brickmakers and farmers. [S4] Meanwhile, a better method already existed. Flexible rod-and-brush sets had been available since the early 1800s, and they cleaned flues without a child inside them. [S6] Master sweeps used them rarely. A boy cost his master little: food, a bed, and a fee every time he was hired out by the job. [S4] Brushes cost money on every call. So the boy went up — and if he stalled in a corner, the evidence given to a Parliamentary committee in 1817 describes masters forcing him upward from below, sometimes by pricking his feet with pins, sometimes by lighting straw in the hearth beneath him. [S2]",
+      "on_screen_text": [
+        {
+          "text": "APPRENTICED YOUNG",
+          "start_s": 62.0,
+          "end_s": 66.0
+        },
+        {
+          "text": "STRIPPED TO THE SKIN",
+          "start_s": 84.0,
+          "end_s": 88.0
+        },
+        {
+          "text": "SOLD BY WEIGHT",
+          "start_s": 104.0,
+          "end_s": 108.0
+        },
+        {
+          "text": "A BRUSH ALREADY EXISTED",
+          "start_s": 112.0,
+          "end_s": 116.0
+        },
+        {
+          "text": "PINS AND LIGHTED STRAW",
+          "start_s": 142.0,
+          "end_s": 147.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "bound to a master sweep",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "barely wider than the shoulders of the child sent into them.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "driving his back and shoulders against the brick to scrape soot",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "soot that was sold, by weight, to brickmakers and farmers.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "Flexible rod-and-brush sets had been available since the early 1800s",
+          "source_id": "S6"
+        },
+        {
+          "text_span": "A boy cost his master little",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "pricking his feet with pins, sometimes by lighting straw",
+          "source_id": "S2"
+        }
+      ]
+    },
+    {
+      "act_number": 4,
+      "act_name": "Hidden Cost",
+      "start_s": 150.0,
+      "end_s": 225.0,
+      "narration": "The cost was written in the boys' bodies. Soot soaked into skin and settled in the lungs; it stunted the chests that were still trying to grow. [S4] The clearest evidence came from surgery. In 1775, Percivall Pott reported that sweeps were developing cancer of the scrotum, caused by soot lodging in the folds of the skin — the first occupational cancer ever identified. [S5] The disease became known as soot wart, and it could kill decades after a man's climbing days were over. [S5] The day-to-day hazards were blunter: burns when a fire was lit too early, choked breath in a soot-filled flue, boys stuck so firmly they had to be dug out of the wall. [S4] In 1817, a Parliamentary committee heard witness after witness describe children maimed, killed, or driven up flues against their will. [S2] None of this was hidden. The reports were printed and the deaths were the subject of inquests — yet the boys still climbed, because the Acts that forbade it left no one with the duty of enforcing them. [S4]",
+      "on_screen_text": [
+        {
+          "text": "THE FIRST OCCUPATIONAL CANCER",
+          "start_s": 164.0,
+          "end_s": 168.0
+        },
+        {
+          "text": "SOOT WART",
+          "start_s": 172.0,
+          "end_s": 176.0
+        },
+        {
+          "text": "1817: PARLIAMENT HEARD IT",
+          "start_s": 196.0,
+          "end_s": 200.0
+        },
+        {
+          "text": "NO ONE ENFORCED THE LAW",
+          "start_s": 216.0,
+          "end_s": 222.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "it stunted the chests that were still trying to grow.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "the first occupational cancer ever identified.",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "known as soot wart",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "boys stuck so firmly they had to be dug out of the wall.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "children maimed, killed, or driven up flues against their will.",
+          "source_id": "S2"
+        },
+        {
+          "text_span": "left no one with the duty of enforcing them.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 5,
+      "act_name": "Turning Point & Legacy",
+      "start_s": 225.0,
+      "end_s": 300.0,
+      "narration": "George Brewster's death made the failure impossible to ignore. The inquest drew national attention, and public anger reached Parliament, where Lord Shaftesbury — who had fought the trade for decades — promoted a new Bill. [S4] Within months, the Chimney Sweepers Act 1875 became law. It required every master sweep to register with the police, and it made the police responsible for enforcing the rules that earlier Acts had left to no one. [S1] The mechanism changed: not another age limit, but a licence that could be checked, and a force paid to check it. [S1] The trade faded quickly. Mechanical brushes took over the flues, and within a few years the climbing boy had all but vanished. [S4] Occasional illegal cases were still reported into the 1880s — the last echoes of a trade that statute alone had never quite reached. [S4] Sixty years of laws against a visible cruelty changed little on their own. What changed was enforcement: the moment someone was paid to open the door, count the sweeps, and ask who was going up. [S1] George Brewster never climbed again. The boys who came after him did not have to.",
+      "on_screen_text": [
+        {
+          "text": "CHIMNEY SWEEPERS ACT 1875",
+          "start_s": 240.0,
+          "end_s": 245.0
+        },
+        {
+          "text": "REGISTERED WITH POLICE",
+          "start_s": 250.0,
+          "end_s": 254.0
+        },
+        {
+          "text": "THE LAST CLIMBING BOYS",
+          "start_s": 274.0,
+          "end_s": 278.0
+        },
+        {
+          "text": "FEBRUARY 1875",
+          "start_s": 295.0,
+          "end_s": 299.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "Lord Shaftesbury — who had fought the trade for decades — promoted a new Bill.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "register with the police",
+          "source_id": "S1"
+        },
+        {
+          "text_span": "a licence that could be checked",
+          "source_id": "S1"
+        },
+        {
+          "text_span": "the climbing boy had all but vanished.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "Occasional illegal cases were still reported into the 1880s",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "count the sweeps, and ask who was going up.",
+          "source_id": "S1"
+        }
+      ]
+    }
+  ]
+}

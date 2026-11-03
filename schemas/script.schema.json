@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Documentary Script",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id", "title", "central_question", "acts", "total_words"],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "title": { "type": "string", "maxLength": 70 },
+    "central_question": { "type": "string" },
+    "total_words": {
+      "type": "integer",
+      "minimum": 700,
+      "maximum": 850,
+      "description": "Total spoken words across all five acts. Sanity distribution for a 140–150 wpm read: Act 1 Cold Open ≈ 45–55 words (20s), Act 2 Context ≈ 90–110 words (40s), Act 3 How It Worked ≈ 210–250 words (90s), Act 4 Hidden Cost ≈ 175–205 words (75s), Act 5 Turning Point & Legacy ≈ 175–205 words (75s)."
+    },
+    "voice": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Optional. Text-to-speech provider settings for the voiceover.",
+      "required": ["provider", "voice_id"],
+      "properties": {
+        "provider": { "type": "string", "enum": ["edge_tts", "elevenlabs"] },
+        "voice_id": { "type": "string" }
+      }
+    },
+    "acts": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["act_number", "act_name", "start_s", "end_s", "narration", "citations"],
+        "properties": {
+          "act_number": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "act_name": {
+            "type": "string",
+            "enum": ["Cold Open", "Context", "How It Worked", "Hidden Cost", "Turning Point & Legacy"]
+          },
+          "start_s": { "type": "number" },
+          "end_s": { "type": "number" },
+          "narration": { "type": "string" },
+          "citations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text_span", "source_id"],
+              "properties": {
+                "text_span": { "type": "string" },
+                "source_id": { "type": "string" }
+              }
+            }
+          },
+          "on_screen_text": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["text", "start_s", "end_s"],
+              "properties": {
+                "text": { "type": "string", "maxLength": 40 },
+                "start_s": { "type": "number" },
+                "end_s": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

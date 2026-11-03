@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Episode",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id", "title", "duration_s", "fps", "width", "height", "acts", "shots", "audio"],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "title": { "type": "string" },
+    "duration_s": { "type": "number", "enum": [300] },
+    "durationInFrames": {
+      "type": "integer",
+      "const": 9000,
+      "description": "300 seconds × 30 fps. The Remotion composition length; must be exactly 9000."
+    },
+    "fps": { "type": "integer", "enum": [30] },
+    "width": { "type": "integer", "enum": [1920] },
+    "height": { "type": "integer", "enum": [1080] },
+    "chapters_path": {
+      "type": "string",
+      "description": "Optional. Path to the emitted chapters.txt file containing the five act timestamps."
+    },
+    "acts": { "type": "array" },
+    "shots": { "type": "array" },
+    "audio": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice_path", "word_timings_path", "mix_path"],
+      "properties": {
+        "voice_path": { "type": "string" },
+        "word_timings_path": { "type": "string" },
+        "mix_path": { "type": "string" }
+      }
+    }
+  }
+}

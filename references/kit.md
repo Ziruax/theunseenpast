@@ -1,154 +1,190 @@
-# The kit: building blocks for shots
+# The kit: engine, hist library, and how the stages chain
 
-Everything imports from one place: `import { Study, Hero, poseAt, Marquee, ... } from '../../engine';`. The world is
-1920 x 1080 units; a shot draws in world units and frames them with a camera.
+Everything an episode author draws with lives in two places:
 
-## A shot
+- `studio/src/engine/` — the kept core: `episode.tsx` (the word-sync timeline), `anim.ts` (easing), `fonts.ts`
+  (Google-font loading), plus the generic Remotion plumbing (`Root.tsx`, `index.ts`).
+- `studio/src/hist/` — the flat-vector historical system (new): palette, shot types, parchment base, figures,
+  environments, lighting, documents/maps, and the thumbnail compositor.
 
-```tsx
-export const S4: React.FC<ShotProps> = ({ t, len }) => {
-  const pose = poseAt(t, [
-    { f: 0, p: { x: 900, y: 712, yaw: 0.45, look: 0.6, armR: { a: 14, b: -6 } } },
-    { f: 6, p: { armR: { a: 70, b: 0 } }, ease: easeOut }, // the reach
-    { f: 9, p: { armR: { a: 62, b: -4 } } }, // overshoot, settle
-  ]);
-  const face = faceAt(t, [[0, 'neutral'], [8, 'smug']]); // swaps through a blink
-  return (
-    <g transform={camT(kf(t, [[0, 980], [len, 960]]), 580, kf(t, [[0, 1.75], [len, 1.9]]))}>
-      {/* offset t so the set's dust and sways don't restart at every cut */}
-      <Study t={t + 80} id="s4" />
-      <Hero look={LOOKS.pipHood} pose={{ ...pose, ...face }} rimId="rimR" shadow={0} />
-      <Desk x0={520} x1={1300} y={700} />
-      <Foreground blur={10}>{/* a dark shape near camera */}</Foreground>
-    </g>
-  );
+The world is 1920×1080 units, 30 fps, and a full episode is 9,000 frames (`durationInFrames: 9000`). A shot draws
+in world units and frames itself with a camera; nothing else changed about the drawing discipline.
+
+## The pipeline's JSON chain
+
+The stages hand off through JSON files. Each stage reads its inputs and writes its output; the validators
+(`pipeline/validate/`) run between them.
+
+```
+research.json ──▶ script.json ──▶ shots.json ──▶ storyboard.json ──▶ final.mp4 ──▶ thumbnail-1/2.png
+   (stage 1)       (stage 2)       (stage 3)        (stage 4)         (stage 5)      (stage 6)
+        ▲               ▲               ▲                  ▲
+  schemas/research  schemas/script  schemas/shots   schemas/storyboard
+```
+
+Where the files live per episode (`<slug>` = the episode's kebab-case id):
+
+| Path | Written by | What |
+|---|---|---|
+| `src/episodes/<slug>/research.json` | stage 1 | Sources, facts, reconstruction flags, asset licenses |
+| `src/episodes/<slug>/script.json` | stage 2 | Five acts, narration, `[S#]` citations, on-screen text |
+| `src/episodes/<slug>/shots.json` | stage 3 | 80–100 shot rows; the sole driver of visual state |
+| `src/episodes/<slug>/storyboard.json` | stage 4 | Per-frame still paths + the 11 boolean checks |
+| `src/episodes/<slug>/words.json` | voice step | Word-boundary timings from the TTS engine |
+| `public/<slug>/voice.*`, `sfx.*`, `music.*`, `mix.*` | voice / sfx / mix | Audio stems |
+| `out/<slug>/board/*.png` | `scripts/stills.mjs` | One still per shot |
+| `out/<slug>/storyboard.jpg` | `scripts/board.py` | The captioned contact sheet |
+| `out/<slug>/chapters.txt` | renderer | Act start timestamps for YouTube |
+| `out/<slug>/final.mp4` | master step | The 300 s master, −14 LUFS / −1 dBTP |
+| `out/<slug>/thumbnail-1.png`, `thumbnail-2.png` | stage 6 | The two concepts |
+
+The engine reads `shots.json` and renders frame-by-frame: the shot list is the source of truth, so a retimed
+episode is a re-run of stage 3, not a re-draw. `words.json` drives word-level sync inside `episode.tsx` — cuts
+cue to the content words, exactly as before, now across 9,000 frames.
+
+## The hist library (`studio/src/hist/`)
+
+### palette.tsx — colour tokens
+
+```ts
+import { PAL, mix, HISTFONT } from '../hist/palette';
+
+PAL.charcoal  // "#20201D"
+mix(PAL.charcoal, PAL.parchment, 0.5)  // the only sanctioned intermediate colour
+```
+
+Rules live in `references/palette.md`. Never hardcode a hex that is not a token or a `mix()` of two.
+
+### shot.ts — the types the JSON stages map onto
+
+```ts
+export type Occupation = 'chimney_sweep' | 'match_worker' | 'miner' | 'sewer_worker' | ...;
+export type Pose = 'standing' | 'bending' | 'climbing' | 'carrying' | 'crouching' | 'reaching';
+export type Facing = 'left' | 'right';
+export type CameraMove = 'hold' | 'slow_push' | 'lateral_pan' | 'detail_push';
+export type VisualType = 'new_scene' | 'shot_size_change' | 'line_reveal' | 'map_change' | 'document_highlight';
+
+export type Shot = {
+  shot_id: string;          // "S03"
+  start_s: number; end_s: number; duration_s: number;  // duration_s ≤ 4.0
+  act: 1 | 2 | 3 | 4 | 5;
+  visual_type: VisualType;
+  environment: string;      // a hist environment key, e.g. "mine_tunnel"
+  characters: Array<{ occupation: Occupation; pose: Pose; facing: Facing; scale: number }>;
+  camera_move: CameraMove;
+  sfx: string[];
+  source_id?: string;
+  description: string;
 };
 ```
 
-- `t` is the shot's own clock in frames, `len` how long it runs, `f` the global frame. Draw only from these, never
-  from state or `Math.random` (scatter with `rnd(seed, i)`), so the engine can play a shot backwards or hold it.
-- Draw order is depth: the set, things behind the character, the character, things in front, then `Foreground`.
-- Camera: `camT(cx, cy, zoom)` centres the world point (cx, cy). Wides about 0.75 to 1.1, mediums 1.6 to 2,
-  close-ups 3 to 4.5. Move it with `kf` for a push-in or a follow; shake inside a shot with `shake(t, from)`.
+`episode.tsx` converts these to frames (`start_s × 30`) and drives the composition from the array. Storyboard
+stills are simply each shot at its key moment.
 
-## The engine (`episode.tsx`)
+### parchment.tsx — the base layer
 
-- `defineEpisode(id, { timeline, shots, looks, grain, vignette })` makes the `<Id>` and `<Id>Board` compositions.
-- A **look** is a power's visual while it runs: `{ grade: (lv) => cssFilter, jitter, Overlay: ({ f, lv, p, n }) => svg }`.
-  `p` runs 0 to 1 through the look's run, `n` counts the runs. The rewind look: desaturate, jitter, tape lines, a
-  REWIND chip and a stopwatch counting back (see `episodes/rewind/index.tsx`).
-- `fx` in `episode.json`: `flash` (one frame, then 35% the next; `color`, `o`) and `shake` (`len`, `amp`).
+Every scene starts with `<ParchmentBase />`: the paper base at full opacity with the texture layer at 15–20%
+opacity on top. It sits *under* the camera group so the texture does not scale with pushes. A scene without it
+fails visual check 11.
 
-## The cast (`rig.tsx`)
+### figures.tsx — block-silhouette characters
 
-One rig, a costume per character (`LOOKS`): `pip` (A, mustard jacket), `pipHood` (B, the hero: dark hoodie, mustard
-drawstrings), `pipInk` (C, dark head), `mo` (the friend: curls, olive jacket, headphones), `sis` (the little sister:
-bunches with coral bands, teal; draw her at about 0.7 of Pip's scale), `mom` (a bob, a rose cardigan), `suit` (the
-man in a suit: combed hair, charcoal suit, red tie). Render the cast sheet with
-`npx remotion still src/index.ts Cast out/cast.png`.
+```tsx
+<Figure occupation="chimney_sweep" pose="climbing" facing="right"
+        scale={0.9} x={960} y={760} silhouetteOnly={false} />
+```
 
-`<Hero look pose rimId shadow />` (alias `Actor`). The **pose**:
+- Silhouette body in `PAL.charcoal`; skin in `PAL.parchment`; clothing in `PAL.bronze` or `PAL.bone`
+- Clothing is period-accurate: overlapping vector shapes (apron, cap, coat, collar), 3px stroke at 1080p
+- Expression, when essential, is dot eyes + line mouth — never cartoon features
+- `silhouetteOnly` for distant or compositional figures
+- Pose keys only: 3–5 per scene, 2–4 frames of eased interpolation between keys (`anim.ts` easing), then hold.
+  No blinking, no breathing, no idle sway.
+- Every figure must read at 200×200 px; check doubtful ones on the cast sheet before the board.
 
-| Field | What |
-|---|---|
-| `x, y, scale` | the hip point in world units; feet are `LEG_LEN * scale` below it |
-| `yaw` | -1 profile facing left, 0 front, 1 profile facing right; the body narrows and the face slides |
-| `facing` | 1 or -1: which way legs swing forward |
-| `tilt`, `spin`, `headTilt` | lean at the hips, whole-body rotation about the chest (tumbles), head tilt |
-| `armL, armR, legL, legR` | `{ a, b }`: upper segment angle from straight down, bend of the lower segment (degrees) |
-| `handL, handR` | `'open'` (mitten with a thumb) or `'point'` |
-| `expr` | neutral, happy, smug, shock, worried, oops, cool, dizzy, tired (heavy lids, dark rings) |
-| `blink, look, glasses` | 0..1 eyelids (1 draws a shut lid's curve: blinks and sleep), -1..1 eye direction, 0..1 shades dropping on |
-| `squash` | + squashes (landing), - stretches (jump), about the feet |
-| `sway` | how far loose things (drawstrings, bunches) swing |
-| `glint`, `glintColor` | 0..1 the eyes light up in the power's colour (default cyan); set it after `poseAt`, it isn't interpolated |
+### Environments
 
-Helpers: `poseAt(t, keys)` (eased keys, faces hold until their key), `faceAt(t, [[f, expr]...])` (a blink at each
-swap), `walkPose(x, phase, ground, scale, extra, facing)` (phase about 0.6 a frame; `ground` a number or a function
-like `hipGround`), `joints(pose)` and `toWorld(pose, point)` (where a hand is, to attach a prop), `reachAngle(pose,
-target)` (the arm angle that points at a world point).
+Ship in `studio/src/hist/` as three-layer components — `background` (parallax 0.3×), `midground` (1.0×),
+`foreground` (1.5×) — each taking the shot clock `t` and an `id`:
 
-## Props (`props.tsx`)
-
-`Cat` (moods sleep, alert, peek; the tail never stops), `Mug` (with steam), `Cookie` (side view, `bite`),
-`CookieTop` (from above), `CookieStack`, `Plate` and `PlateTop`, `Paper` (from above: `done` with ticks and a grade,
-`fill` writes it in, or blank), `PaperStack`. For night episodes: `AlarmClock` (a digital bedside clock, `text` on its
-display), `WallCalendar` (a month, `crossed` days with red crosses, the next one drawing on with `drawing`;
-`calendarDay` gives a day's cell for a hand holding the marker), `OpenBook` (`turn` flips a page), `BookFlat`,
-`BookTower`, `LaptopBack` (a lid from behind, its screen light spilling round it). From the preview run:
-`PizzaSlice` (from above, x y the tip, `bite` eats back from the tip, `drip` hangs cheese; squash it in y for a
-three-quarter view), `PizzaBox` (open and empty, `lid` stands the lid up), `Phone` (dark and glossy, or `on` with an
-incoming call: `caller`, `buzz`), `PaperBall`. Add props here when an episode needs them, drawn in the same style:
-flat fills, a darker shade on the side away from the light, a warm rim line on the lit edge, a contact shadow.
-
-For inserts, `Tabletop` (`furnish.tsx`) fills the frame with a surface seen from high above (wood or stone), its lit
-front edge at `edge` and the floor blurred below; push `edge` past 1080 for a straight top-down shot. Put props on it
-in screen coordinates and bring a character's arm in from the side of frame where they are in the neighbouring shots
-(the dark sleeve and the mitten, scaled up: see `S2` and `S4` in `episodes/copy-paste/shots.tsx`).
-
-## Sets
-
-Each set is a component taking the shot clock `t` (for dust, sways, flicker) and an `id`. Offset `t` per shot so
-idle motion carries across cuts.
-
-| Set | Coordinates and parts | Props |
+| Environment | Component | Typical use |
 |---|---|---|
-| `Study` (`sets/study.tsx`) | `STUDY = makeRoom({980,500}, back 530-1430 x 335-740)`. `night` puts the moon in the window and turns the pendant off (the `Desk` lamp becomes the light); `shelf` (0..1) empties the bookcase, books flying from `STUDY_SHELF_V`. Window 782-1178 x 380-606 with the sun at (1085, 596); bookcase on the left wall, door and print on the right, pendant at u 0.32 w 0.42, wall light on the left. `Desk x0 x1 y` stands mid-room (the proof clip: x0 560, x1 1360, y 700, Pip behind it at hips (960, 712) scale 1). | `veil` (0.28 for a wide that must show the floor) |
-| `Stairwell` (`sets/stairwell.tsx`) | Side-on: 7 steps of 150 x 70 down to the right from a landing at y 420 (`SW`). `stepTop(x)`, `hipGround(x)`. Lit doorway upper left, arched window lower right, lantern, sconces. `Banister` is the near layer, drawn after the characters. Walk at scale 0.9. | |
-| `Classroom` (`sets/classroom.tsx`) | `CLS = makeRoom({900,470}, back 300-1500 x 130-720)`. Board 426-1054 x 196-524, windows on the left wall, two rows of desks with `Kid`s from behind. `SchoolDesk x` is the hero's desk (y 750); the proof clip's Pip stood at (1260, 760), yaw -0.35. `Kid` with `turn` and `laugh` works as a blurred foreground figure for over-the-shoulder shots. | `board` (your own chalk), `solved`, `wrong`, `laugh` |
-| `Rooftop` (`sets/rooftop.tsx`) | Parapet at y 790, deck below (feet at about y 820). The sun at (`sunX`, `sunY`), r 170, optionally a clock (`clock`, `spin`, `crack`). City in three depths, string lights between poles at x 140 and 1780. | `red` (the turn's red sky), `lightsOut`, `blackout` (city windows go dark in a sweep from the left), `cityLit` (more lit windows: about 2.5 for a blackout), `low` (camera lower: the city and roof drop by `low`, so feet go lower too) |
-| `Kitchen` (`sets/kitchen.tsx`) | Built with the room kit: `KITCHEN = makeRoom({960,500}, back 500-1420 x 330-745, 3.4)`. Counter run along the back wall with a sink under the window (sun at 860, 530), hob and kettle, splashback, open shelves with jars, fridge on the right, wall cabinets and a wall light on the left, two pendants. Characters stand behind the island at w 0.4 (`stand(KITCHEN, u, 0.4)`), then draw `KitchenIsland` (with two bar stools) so it hides their legs; `islandTop(u, d)` is a point on its top. | `veil`, `red` |
-| `Bedroom` (`sets/bedroom.tsx`) | At night, built with the room kit: `BEDROOM = makeRoom({940,500}, back 480-1440 x 320-742, 3.4)`. Bed in the back left corner (headboard on the back wall, u 0.03-0.4, foot at w 0.47), nightstand with the lamp (`LAMP`) and the clock, `WINDOW` 1070-1330 x 374-600 onto the moon and the lit city, fairy lights and posters over the bed, `CAL` (the wall calendar), a dresser under the window, wardrobe on the right wall, door ajar on the left with the hall light, rug, beanbag, trainers. In bed: draw it with `duvet={false}`, then the character at `bedSit(u)`, then `BedDuvet` (with `knees`) over their legs. `bedTop(u, w)` is a point on the mattress. | `clock`, `lamp` (0..1: flicker it, kill it), `crossed` (the calendar), `veil` |
-| `Schematic` (`sets/schematic.tsx`) | The science beat's ground: a dark blueprint grid with registration marks. On it: `DrawOn` (a path drawing on), `Arrow`, `SchLabel` (mono, pops on), `CountUp` (a number counting, with commas), `PlantIcon` (tower, wind, solar, dam, factory; lit orange when `on`). `SCH` holds its colours. | |
+| Mine tunnel | `MineTunnel` | Acts 1/3, coal episodes |
+| Factory floor | `FactoryFloor` | Textile, match, machinery |
+| Victorian street | `VictorianStreet` | Context, transition, legacy |
+| Workhouse | `WorkhouseInterior` | Workhouse/pauper episodes |
+| Sewer | `SewerTunnel` | Sewer hunters, sanitation |
+| Hospital ward | `HospitalWard` | Consequences, medicine |
+| Medieval workshop | `MedievalWorkshop` | Pre-industrial trades |
+| Railway | `RailwayConstruction` | Navvies, expansion |
 
-## The room kit (`room.tsx`, `furnish.tsx`)
+Each carries its own parallax-friendly geometry and expects lighting to be layered on top (below). New
+environments follow the same structure and are added to the skill's copy so the next episode inherits them.
 
-For a new interior, in this order:
+### Lighting (vector gradients)
 
-1. `const R = makeRoom(vp, { x0, x1, y0, y1 }, depth)`: the back wall's box on screen, the vanishing point, how deep
-   the room is (3.2 to 3.5). A point in the room is `R.P(u, v, w)`: u across 0..1, v down 0..1, w toward camera
-   0..1 (0 on the back wall). `R.Q([[u, v, w], ...])` gives polygon points.
-2. `<RoomShell r={R} id floor="boards" | "tiles" wall side floorC />`: ceiling, walls, floor, texture, corners, trim.
-3. Light sources: `<BackWindow r id t x0 x1 y0 y1 sun cols curtains />`, `<Pendant r u w t />`, `<WallLight r u v w />`.
-4. Furniture: `<Box r u={[u0,u1]} v={[v0,v1]} w={[w0,w1]} front top side rim />` draws only the faces this camera
-   sees; `<FloorShadow r u w />` under it. Small things go on top of boxes at `R.P(u, v0, w)`.
-5. Dressing: `<FloorPlant r u w />`, `<WallFrame x y w h art />`, `<WallClock x y />`, books, jars, rugs.
-6. Finish: `<LightVeil id lights={[[x, y, radius], ...]} o={0.42} />` with a hole at each light (`pendantLight(R, u,
-   w)` gives a pendant's), then the glows again on top (`Glow`), then `Dust` in the brightest beam.
-7. Characters: `stand(R, u, w)` gives the hip point and scale for someone standing at floor point (u, w).
+Chiaroscuro is SVG gradients, applied over the environment and figures:
 
-## Light and atmosphere (`light.tsx`, `kit.tsx`)
+- A radial/linear gradient from a **visible light source** — the miner's lamp, the furnace, the window — with
+  `PAL.bone`/`PAL.bronze` falling to `PAL.charcoal`
+- Light direction must match scene logic: candle below a face lights it from below; a side window splits it
+- Only palette colours in gradients (`mix()` for mid stops)
+- No bloom, no glow, no lens flare — a lamp is a bright shape plus a gradient, not a filter effect
 
-`Glow` (screen-blended radial light: warm, cool, red), `Cone` (a lamp's soft cone), `LightVeil` (the contrast
-pass), `Dust` (specks in a beam), `WallTexture`, `RoomCorners`, `SkyView` (a window onto the dusk: sky, sun, far
-city; `night` for a deep blue sky, stars, the moon where the sun was, the city lit; `BackWindow` takes `night` too).
-`DuskSky`, `Sun`, `Rays`, `Haze`, `Bokeh`, `Shaft`, `Skyline`, `Foreground` (blur 3, 6, 10 or 16), and for night
-`NightSky`, `Moon`, `Stars`. Filters for characters: `rimR`, `rimL`, `rimRed`, and `rimBlue`, `rimBlueL` for
-moonlight and screen light.
+### Documents and maps
 
-## UI and marks (`ui.tsx`)
+`hist` includes animators for the evidence shots (10% of the grid, per `references/pacing.md`):
 
-All in the mono face on a dark translucent pill, cream text, orange for the live value.
+- **Documents** — a report/act/letter on `ParchmentBase`, text as charcoal strokes; a clause highlights with a
+  crimson underline + wash (`document_highlight` shots). The page must be a vector redraw clearly labelled
+  "illustrated reconstruction" if it stands in for a real document.
+- **Maps** — Britain/London/Europe flat vector; regions fill, spread, or highlight over 0.5–1 s per state change
+  (`map_change` shots; e.g. cholera deaths spreading block-by-block).
 
-| Block | Use |
-|---|---|
-| `TitleCard t lines accent accentT` | the premise over a wide, inside the camera group |
-| `HudChip f label icon` | names the power while it runs (rewind, pause, copy, paste, skip, dot) |
-| `Dial p readout` | a stopwatch, a countdown, a battery |
-| `Gauge x y p label` | a level going up or down (energy, money, risk) |
-| `Tag x y t text mark` | a short answer or value, with a cross or a tick drawn on |
-| `Marquee x y w h t label` | a selection box with marching ants: picking a thing out of the world |
-| `PasteIn x y t` | wraps anything that appears from nowhere: it pops in with an overshoot, a glow and an opening ring |
-| `Toast x y t text` | a small notice that pops in and out (COPIED, SAVED) |
-| `FloatLabel x y t text` | "x10", "+1" rising and fading |
-| `FocusRings`, `DizzyStars`, `Sparkle` | a realisation, a daze, a glint |
-| `TapeLines f` | VHS lines for time powers (full frame, in a look's overlay) |
-| `FONT.title / ui / hand` | the three faces |
+### Thumbnail compositor
+
+`hist`'s thumbnail module renders the stage-6 concepts at 1280×720: one dominant subject re-lit for contrast,
+headline text 140–180px Inter Bold in code (top or bottom third), two different concept types per episode. Rules:
+`references/thumbnails.md`.
+
+## How an episode author builds a shot
+
+1. Read the shot row from `shots.json` (`shot_id`, times, `environment`, `characters`, `camera_move`, `description`).
+2. Write the shot component: `ParchmentBase` → environment (three layers) → figures per the row → lighting
+   gradient from the scene's light source → the row's action as pose keys with `anim.ts` easing → overlays in code.
+3. Derive everything from the shot's clock `t` (frames) — no `Math.random`, no state. Scatter with a seeded RNG.
+   The same `t` must always draw the same frame.
+4. Camera: `hold` is a static transform; `slow_push` is 2–4% over the shot's length; `lateral_pan` 5–10%; pans
+   respect the environment's 0.3× / 1.0× / 1.5× parallax.
+5. Register the shot in the episode's index; `episode.tsx` composes all shots from `shots.json` + `words.json`.
+
+## Storyboard stills (`scripts/stills.mjs`)
+
+```bash
+node <skill>/scripts/stills.mjs <slug>              # one still per shot, at its key frame
+node <skill>/scripts/stills.mjs <slug> S24 S31      # re-render named shots after a fix
+python <skill>/scripts/board.py <slug>              # captioned contact sheet, out/<slug>/storyboard.jpg
+```
+
+A still takes about two seconds; a full 100-shot board renders in minutes. Iterate here, never on video renders —
+a full 300 s episode render is orders of magnitude more expensive. Every still goes through both gates
+(`references/self-check.md`) before stage 5.
+
+## Render and master
+
+```bash
+python <skill>/scripts/master.py <slug>
+```
+
+Renders the composition (1920×1080, 30 fps, 9,000 frames, H.264), mixes to −14 LUFS / −1 dBTP, writes
+`chapters.txt` (five act timestamps) and the run report. `mixcheck.py` verifies no stem comes within 3 dB of the
+voice while a word is spoken.
 
 ## Adding to the kit
 
-- **A set:** build it with the room kit in `src/engine/sets/<name>.tsx`, export it from `engine/index.ts`, document
-  its coordinates in the table above, and copy it into the skill's `studio/src/engine/sets/` so it ships.
-- **A character:** a new `Look` in `LOOKS` (colours, plus an `extra` piece if it needs one, drawn in `Hero`), checked
-  on the cast sheet for contrast on the dark sets and for resemblance to anything famous.
-- **A power look:** in the episode's `index.tsx`; move it to `ui.tsx` once a second episode wants it.
+- **An environment:** build it in `src/hist/<name>.tsx` with the three-layer structure and an `id` prop, export it
+  from `hist/index.ts`, document it in the table above, copy it into the skill's `studio/src/hist/`.
+- **An occupation or pose:** add to `figures.tsx` with period-accurate clothing layers and its tools; check the
+  silhouette on the cast sheet; add it to the `Occupation`/`Pose` types in `shot.ts` so `shots.json` can use it.
+- **A document/map animator:** draw on `ParchmentBase`, keep text as code, keep highlights crimson-limited.
+- **A prop family:** anything an episode needs twice goes in `hist`, not in the episode's own folder.

@@ -1,0 +1,54 @@
+{
+  "episode_id": "pilot-chimneys",
+  "title": "Why Victorian Children Were Forced to Climb Chimneys",
+  "description": "In February 1875, a twelve-year-old boy named George Brewster died wedged in a chimney flue in Cambridge. His death ended a trade that Parliament had been trying — and failing — to stop for nearly a century: the use of child 'climbing boys' to sweep Britain's chimneys. This episode follows the apprenticeships, the flues, the tools, the soot cancer first identified in 1775, and the sixty years of laws that changed nothing until someone was paid to enforce them.\n\nSources:\n[S1] Chimney Sweepers Act 1875 (38 & 39 Vict. c. 70) — legislation.gov.uk, The National Archives: https://www.legislation.gov.uk/ukpga/Vict/38-39/70\n[S2] Report of the Select Committee on the Employment of Boys as Chimney Sweepers (1817), Parliamentary Paper — UK Parliament: https://www.parliament.uk/about/living-heritage/transformingsociety/livinglearning/19thcentury/overview/earlychildlabour/\n[S3] Chimney Sweepers and Chimneys Regulation Act 1840 — legislation.gov.uk, The National Archives: https://www.legislation.gov.uk/ukpga/Vict/3-4/85\n[S4] UK Parliament Living Heritage — early child labour / chimney sweeps (incl. George Brewster case): https://www.parliament.uk/about/living-heritage/transformingsociety/livinglearning/19thcentury/overview/earlychildlabour/\n[S5] Encyclopaedia Britannica — Percivall Pott: https://www.britannica.com/biography/Percivall-Pott\n[S6] Encyclopaedia Britannica — Chimney sweep: https://www.britannica.com/topic/chimney-sweep\n\nDisclosure: This video is an animated reconstruction made with AI/synthetic tools — the narration is a synthetic voice, and all visuals are code-drawn flat-vector illustrations. The character 'Thomas' is a reconstructed composite based on documented climbing boys' testimonies, not a real individual; scenes featuring him are illustration, not evidence.",
+  "chapters": [
+    {
+      "time_s": 0.0,
+      "label": "Cold Open: Cambridge, 1875"
+    },
+    {
+      "time_s": 20.0,
+      "label": "Context: A Century of Failed Laws"
+    },
+    {
+      "time_s": 60.0,
+      "label": "How It Worked: Up the Flue"
+    },
+    {
+      "time_s": 150.0,
+      "label": "The Hidden Cost"
+    },
+    {
+      "time_s": 225.0,
+      "label": "Turning Point & Legacy"
+    }
+  ],
+  "tags": [
+    "victorian history",
+    "chimney sweeps",
+    "climbing boys",
+    "child labour",
+    "industrial revolution",
+    "George Brewster",
+    "Lord Shaftesbury",
+    "Percivall Pott",
+    "soot wart",
+    "social history",
+    "animated documentary",
+    "19th century Britain",
+    "chimney sweepers act 1875",
+    "occupational cancer",
+    "working class history",
+    "Victorian Britain",
+    "parliamentary reform",
+    "British history",
+    "hidden history",
+    "forgotten workers"
+  ],
+  "thumbnail_paths": [
+    "thumbnail-1.png",
+    "thumbnail-2.png"
+  ],
+  "disclosure": true
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Storyboard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id", "frames", "self_check_passed"],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "self_check_passed": { "type": "boolean" },
+    "contact_sheet_path": {
+      "type": "string",
+      "description": "Optional. Path to a generated contact sheet image showing all storyboard stills at a glance for review."
+    },
+    "frames": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["shot_id", "still_path", "checks"],
+        "properties": {
+          "shot_id": { "type": "string" },
+          "still_path": { "type": "string" },
+          "checks": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "reads_at_200px", "single_focal_point", "clear_silhouette",
+              "no_anachronism", "palette_compliant", "crimson_max_once",
+              "text_max_4_words", "no_stick_figures", "period_accurate",
+              "background_depth", "parchment_layer"
+            ],
+            "properties": {
+              "reads_at_200px": { "type": "boolean" },
+              "single_focal_point": { "type": "boolean" },
+              "clear_silhouette": { "type": "boolean" },
+              "no_anachronism": { "type": "boolean" },
+              "palette_compliant": { "type": "boolean" },
+              "crimson_max_once": { "type": "boolean" },
+              "text_max_4_words": { "type": "boolean" },
+              "no_stick_figures": { "type": "boolean" },
+              "period_accurate": { "type": "boolean" },
+              "background_depth": { "type": "boolean" },
+              "parchment_layer": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

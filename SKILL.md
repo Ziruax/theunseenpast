@@ -1,176 +1,187 @@
 ---
-name: what-if-animation
-description: Make a "What If" animated episode from one topic line ("What if you could rewind 10 seconds?"), in the dusk-lit stick-figure style of the What If channels that broke out on YouTube in October 2026. Writes the script on the seven-beat What If formula, voices it with ElevenLabs, lays out a shot list at the genre's pace, renders a storyboard of stills and self-checks it before animating, animates every frame in code (Remotion and SVG, with an original cast on one rig, rooms in perspective and light from lamps and windows), generates and syncs the sound, and masters a finished 15-25 s episode to -14 LUFS. Use when someone asks for a What If episode, animation or cartoon, "make a what if video about X", a stick-figure explainer in this style, or to run the free What If skill.
+name: unseen-past
+description: 'Make a 5-minute animated historical documentary episode for "The Unseen Past" — a faceless YouTube channel covering dangerous jobs, forgotten workers, and the hidden human costs of history. Runs a gated pipeline — research dossier, five-act script with citations, 80–100 shot list, storyboard of code-drawn stills, 300 s Remotion render at 1920x1080/30fps, two thumbnails, YouTube metadata — in a flat-vector parchment style with block-silhouette figures, period-accurate tools, and chiaroscuro vector lighting. Voice is word-synced with free Microsoft Edge TTS (en-GB-RyanNeural) by default, ElevenLabs optional. Use when someone asks to "make a history documentary video about X", "a The Unseen Past episode about X", an animated history explainer, a Victorian dangerous-jobs video (chimney sweeps, match girls, miners, workhouses), or a 5-minute faceless-channel documentary in this style.'
 ---
 
-# What If animation
+# The Unseen Past — Animated Historical Documentary Pipeline
 
-One topic line in, a finished 15-25 second episode out. Every frame is SVG that Claude writes (rendered by
-Remotion); the voice and the sound come from ElevenLabs. Two examples ship in `studio/src/episodes/`, both ready to
-render: `rewind` ("What if you could rewind 10 seconds?", the proof clip: shots played backwards as the power) and
-`copy-paste` ("What if you could copy and paste anything?", the skill's first full run: a new kitchen set, a
-schematic for the science beat, a cliffhanger blackout). Read the one closest to your topic before you start.
+One topic line in, a finished 5-minute (300-second) fully animated historical documentary episode out — for
+"The Unseen Past": dangerous jobs, forgotten workers, hidden human costs in history. Every frame is SVG that
+Claude writes (rendered by Remotion). The voice is free Microsoft Edge TTS (en-GB-RyanNeural) with word-boundary
+timings; ElevenLabs is optional and off unless `ELEVENLABS_API_KEY` is set. Two quality gates (historical and
+visual) block the render until the storyboard passes.
+
+## What this skill produces
+
+Per episode:
+
+- 300-second master MP4 (1920×1080, 30 fps, −14 LUFS integrated, −1 dBTP)
+- Word-synced voiceover (free Edge TTS `en-GB-RyanNeural` by default; ElevenLabs neutral British English optional)
+- 80–100 code-drawn flat-vector historical scenes
+- Two 1280×720 thumbnail PNGs with one-line rationales
+- YouTube metadata package (title ≤70 chars, description with sources and disclosure, `chapters.txt`, tags)
+
+## What this skill does NOT do
+
+- It does not generate 15–25 second "What If" shorts. That formula is retired.
+- It does not use stick figures or dusk-lit perspective rooms. That visual system is retired.
+- It does not script before research. The research gate is mandatory.
+- It does not use photorealistic AI images. All visuals are SVG + Remotion code.
+- It does not invent quotations, private thoughts, or unsourced statistics.
+
+## The mandatory pipeline (in order)
+
+Every episode passes through these stages sequentially. The skill must refuse to skip a stage. Stage prompts live
+in `pipeline/stage-1-research.md` … `stage-6-thumbnail.md` (stage 7, metadata, is part of the handover).
+
+| Stage | Output | Gate |
+|---|---|---|
+| 1. Research | `research.json` | ≥2 primary sources, licensed assets |
+| 2. Script | `script.json` | 5 acts, 700–850 words, all `[S#]` citations resolve |
+| 3. Shot list | `shots.json` | 80–100 shots, every shot ≤4.0 s, durations sum to 300 ± 0.5 s |
+| 4. Storyboard | stills + `storyboard.json` | Historical gate (8 checks) AND visual gate (11 checks) |
+| 5. Animation | `final.mp4` + `chapters.txt` | Mix at −14 LUFS / −1 dBTP |
+| 6. Thumbnail | `thumbnail-1.png`, `thumbnail-2.png` | Two different concept types, ≤4 words each |
+| 7. Metadata | title, description, chapters, tags | Title ≤70 chars; sources + synthetic-content disclosure in description |
+
+If any stage fails its quality gate, stop and report. Do not proceed.
+
+## Narrative formula
+
+The **Five-Act Historical Documentary Arc** — see `references/formula.md`:
+
+| Act | Duration | Function |
+|---|---|---|
+| Cold Open | 0:00–0:20 | Documented danger, contradiction, or consequence |
+| Context | 0:20–1:00 | Person, place, period, central question |
+| How It Worked | 1:00–2:30 | Process, tools, lived experience |
+| Hidden Cost | 2:30–3:45 | Risks, incentives, consequences, evidence |
+| Turning Point & Legacy | 3:45–5:00 | Reform, resistance, what changed, why it matters |
+
+Word count: **700–850 spoken words** at 140–150 wpm. Every material claim carries a `[S#]` citation that resolves
+to a source in `research.json`.
+
+## Visual style
+
+**Flat-vector historical documentary** — see `references/style.md` and `references/palette.md`.
+
+- Block-silhouette characters with period-accurate clothing and tools; 3–5 key poses per scene, 2–4 frame
+  interpolations, then hold
+- Chiaroscuro via SVG vector gradients driven by visible light sources (lamp, fire, window) — never flat fills,
+  never glow or bloom
+- Parchment texture base layer at 15–20% opacity
+- Five-colour palette: charcoal, parchment, bronze, crimson, bone — crimson is an accent, one element per scene
+
+## Pacing rule
+
+**Visual change every 2–3 seconds.** Hard maximum 4.0 seconds per shot; 80–100 visual changes per episode. See
+`references/pacing.md`. Every cut carries information — no filler cuts to hit the count.
+
+## Research requirement
+
+Before any script is written, `research.json` must exist and pass its validator. It must contain:
+
+- Core historical claim (one sentence, falsifiable)
+- Exact period (start year–end year) and geographic location
+- Key dates and named figures (if any), each with a `source_id`
+- At least 2 primary-source evidence items from Priority 1 or 2 sources (see `references/research.md`)
+- Explicit distinction between documented fact and reconstruction; composite characters flagged
+- Source URLs and licenses for all borrowed assets
+
+The script generator must cite a `source_id` for every material claim. Insufficient sources → the pipeline halts
+with `INSUFFICIENT SOURCES`.
+
+## Voice specification
+
+- Default: **free Microsoft Edge TTS via `edge-tts`, voice `en-GB-RyanNeural`** (neutral British English), which
+  returns word-boundary timings for free — those timings drive the word-level sync in the engine.
+- Optional: ElevenLabs (neutral British English, mature, measured) when `ELEVENLABS_API_KEY` is set and commercial
+  use is verified for the plan.
+- Target 140–150 wpm. Act-boundary pauses 0.8–1.2 s; evidence reveals 0.4–0.6 s; natural sentence breaks
+  0.2–0.3 s. No artificial urgency, no "Shorts host" energy, no tightened-pauses post-process (retired).
+- Pronunciation check every historical name and place name (see `references/traps.md`).
+
+## Quality gates
+
+Two gates must pass before rendering — both defined in `references/self-check.md`:
+
+1. **Historical gate** — 8 checks (sources, citations, composites flagged, no fake documents, no overclaiming,
+   licenses, disclosure). Run after storyboard, before animation.
+2. **Visual gate** — 11-point stills checklist, rewritten for flat-vector (reads at 200×200 px, one focal point,
+   palette compliance, no anachronisms, parchment layer present, …). Run on every still.
+
+If either gate fails, block rendering.
+
+## File map
 
 | File | What's in it |
 |---|---|
-| `references/formula.md` | The seven-beat What If formula, the 15-25 s shape, script rules, choosing a topic |
-| `references/look.md` | The measured look, pace, shot vocabulary, and the storyboard and motion checklists |
-| `references/kit.md` | The building blocks: engine, cast, sets, room kit, light, UI, looks, and how to add each |
-| `references/sound.md` | Writing sound events, prompts, levels, costs |
-| `references/traps.md` | Everything that cost time on the two example episodes |
-| `studio/` | The Remotion project: copy it once, then every episode lives in it |
+| `references/research.md` | Source hierarchy, `research.json` field spec, rejection rules, archive destinations |
+| `references/formula.md` | The five-act arc, per-act word budgets, storytelling rules |
+| `references/pacing.md` | The 2–3 s cut grid, per-act cut targets, what counts as a visual change |
+| `references/style.md` | The flat-vector historical look: figures, environments, animation rules, forbidden list |
+| `references/palette.md` | The five colour tokens, typography, type sizes |
+| `references/sound.md` | Voice, ambience beds, sparse music, mix targets (LUFS/dBTP) |
+| `references/self-check.md` | Both quality gates: 8 historical checks, 11 visual checks |
+| `references/thumbnails.md` | Thumbnail concept types A–D, text rules, what to avoid |
+| `references/kit.md` | The engine and hist library: how to build a shot, render stills, chain the JSON stages |
+| `references/traps.md` | Everything that cost time — drawing, motion, sound, research, pipeline |
+| `schemas/` | JSON contracts: `research`, `script`, `shots`, `storyboard`, `episode` |
+| `pipeline/` | One prompt per stage (`stage-1` … `stage-6`) and the validators under `pipeline/validate/` |
 | `scripts/` | voice, plan, stills, board, sfx, mixcheck, motiongrid, master (Python 3.9+ and Node) |
-
-## Rules
-
-- **Original characters only.** Pip (the hero, look B) and Mo (his friend) are ours, and so are the sister, mum and
-  the suit on the rig. Never a channel's own hero, and nothing that resembles a famous cartoon character: check every
-  new look on the cast sheet (Mo's first hat was dropped for drifting toward one).
-- **Original stories.** The formula is shared; the episode isn't anyone else's. Don't remake a channel's title.
-- **Never claim the viral channels are made with Claude** or any other tool. Nobody has said how they're made.
-- **Keys by name only.** `ELEVENLABS_API_KEY`, from the environment or a `.env`
-  above the studio. Never print, paste or hardcode a key.
-- **Report the ElevenLabs credits** of every run: the scripts log them to `out/<slug>/costs.json` and `master.py`
-  totals them in `report.json`. The voice's cost is read from the account's history (exact); sound clips don't show
-  there, so their cost comes from the account counter, which can lag: re-read it before you report. Say the number
-  when you hand the episode over. The copy-paste run cost 152 credits (78 for the voice, 74 for 12 new clips).
-- **Storyboard before animation.** No video render until the stills pass the self-check (step 5) and, when the person
-  is in the loop, they've seen the board.
-- **Every fact is real.** A number in the script is worked out and sourced in the episode's `science` field first.
+| `studio/` | The Remotion project: copy it once, then every episode lives in it |
 
 ## Setup (once per machine)
 
-Needs Node 18+, ffmpeg and ffprobe on the PATH, Python 3.9+ with `numpy` and `Pillow`, and an ElevenLabs key.
+Needs Node 18+, ffmpeg and ffprobe on the PATH, and Python 3.9+ with `numpy` (Pillow where scripts use it).
 
 ```bash
-cp -r <skill>/studio ./what-if-studio && cd what-if-studio && npm install
+cp -r <skill>/studio ./unseenpast-studio && cd unseenpast-studio && npm install
 ```
 
-Everything below runs from that studio folder; `<skill>` is this skill's folder. To work offline or in your own
-brand face, put a display font in `public/fonts/` and set `titleFont` in `src/studio.config.ts` (the default title
-face, Bricolage Grotesque, and the UI faces load from Google Fonts at render time). To update an existing studio to
-a newer engine, copy `<skill>/studio/src/engine` over its `src/engine`.
+Everything below runs from that studio folder; `<skill>` is this skill's folder. The default voice needs **no key**:
+`edge-tts` is free (`pip install edge-tts`). To use ElevenLabs instead, set `ELEVENLABS_API_KEY` in the
+environment or a `.env` above the studio — and verify your plan permits commercial use.
 
-## The pipeline
+**Keys by name only.** Reference `ELEVENLABS_API_KEY` by name, from the environment or a `.env` above the studio.
+Never print, paste, or hardcode a key — not in code, not in logs, not in chat.
 
-Work through the steps in order. Each ends on something you look at before the next.
+**Free-voice note.** Edge TTS (`en-GB-RyanNeural`) costs nothing and returns word boundaries; it is the default.
+It is a synthetic neural voice — the episode's description must carry the synthetic-content disclosure regardless
+of which voice was used.
 
-### 1. Script
+## Rules
 
-Read `references/formula.md`. Search YouTube for the premise first: if a What If channel already has that exact
-episode, change the power or the rule. From the topic line, decide the power's word, its rule, three escalating
-demos and the turn (one real fact with a number). Write `src/episodes/<slug>/episode.json` with `id` (PascalCase,
-the composition name), `slug`, `topic`, `title` (two lines), `script` (one entry per beat) and `science` (each fact:
-the claim, the working, the source). 45 to 65 words. Read it aloud at pace: every line must be a picture.
+- **Research gate is mandatory.** No scripting before `research.json` passes its validator. No topic line in →
+  script out; that shortcut is retired.
+- **Every fact is sourced.** Every material claim in the script cites a `[S#]` resolving to `research.json`.
+  Never invent quotations; paraphrase unless a verbatim source exists.
+- **Composite characters only when flagged.** A reconstructed composite must be flagged in the script AND carry an
+  on-screen "reconstructed composite" caption. No real person's likeness; nothing resembling a living person.
+- **Original characters, original stories.** The block-figure cast is ours. Never a channel's own hero, nothing
+  that resembles a famous cartoon character; check every new figure on the cast sheet.
+- **Storyboard before animation.** No video render until the stills pass both gates — 80–100 stills is the normal
+  cost of a board; iterate on stills, never on renders.
+- **Never claim real channels use AI tools** or any other tool. Nobody has said how they're made. Never claim any
+  real channel's episode as precedent for this pipeline's output.
+- **Synthetic-content disclosure.** Every upload carries YouTube's altered/synthetic content disclosure; the
+  description lists sources and states that visuals are illustrated reconstruction, not archival footage.
+- **Keys by name only.** See Setup.
+- **Report the run.** Voice engine used, credits (if ElevenLabs), shot count, gate results, anything you'd still
+  improve.
 
-### 2. Voice
+## Retired concepts
 
-```bash
-python <skill>/scripts/voice.py <slug>
-```
+The following are explicitly retired and must not appear in any new output:
 
-One ElevenLabs take with character timestamps (the 356-character copy-paste take cost 78 credits), then the pauses
-cut to the genre's pace: `public/<slug>/voice.wav` and `src/episodes/<slug>/words.json`. Check the length (15-25 s)
-and the word times it prints. Retune pauses with `gaps` in `episode.json` and re-run: the take is cached, so that's free. Change a word
-and it calls the API again.
+- Seven-beat "What If" formula
+- Stick-figure cast (replaced by block-silhouette figures in `studio/src/hist/figures.tsx`)
+- Dusk-lit perspective rooms (replaced by flat-vector historical environments)
+- 15–25 second runtime (now 300 s; `durationInFrames` = 9000 at 30 fps)
+- "One topic line in → script" flow (replaced by the mandatory research gate)
+- Per-action cartoon SFX on every visible action (replaced by the mix targets in `references/sound.md`)
+- Tightened pauses for viral pace (voice plays at natural 140–150 wpm with documented pause lengths)
+- "27 cuts per minute opening burst" logic (replaced by the uniform 2–3 s grid in `references/pacing.md`)
 
-### 3. Shot list
-
-Design one shot per picture in the script (usually 9 to 14), varying the size and angle every cut (wide, insert,
-medium, close-up, over the shoulder, high, low; see `references/look.md`). Add to `episode.json`:
-
-- `shots`: `{ "id": "S1", "size": "medium", "set": "kitchen", "key": 14, "note": "what we see" }` (`key` is the
-  frame of the shot's own clock the storyboard shows)
-- `edit`: `{ "shot": "S1", "at": "cookie" }` per cut, cued on the word it lands on (`plan.py` lists the cue forms;
-  `reverse`, `from`, `to` and `look` for powers that bend a shot's clock)
-- `fx`: one-frame flashes and shakes, `{ "at": "S3+2", "kind": "flash" }`
-
-```bash
-python <skill>/scripts/plan.py <slug>
-```
-
-It writes `timeline.json` and `out/<slug>/shotlist.md` and prints the pace. Aim for 27+ cuts a minute in the
-opening and no static shot over about 3 s; fix what it flags before drawing anything.
-
-### 4. Storyboard
-
-Read `references/kit.md` for the building blocks. Write `src/episodes/<slug>/shots.tsx`, one component per shot,
-each a pure function of its clock `t` (copy the patterns in the two examples' `shots.tsx`), and `index.tsx` (the
-episode and its power look), then add the episode to `src/episodes/index.ts`. At this step each shot only needs to
-be right at its `key` frame. When a topic needs a place the library lacks, build it with the room kit and add it to
-`src/engine/sets/` (and to the skill's copy) so the next episode has it, as the copy-paste run did with the kitchen
-and the schematic. A new character or costume: add the look, then check it on the cast sheet
-(`npx remotion still src/index.ts Cast out/cast.png`).
-
-```bash
-npx tsc --noEmit
-node <skill>/scripts/stills.mjs <slug>
-python <skill>/scripts/board.py <slug>
-```
-
-`out/<slug>/storyboard.jpg`: one captioned still per shot.
-
-### 5. Self-check the stills
-
-Look at the storyboard, then open every still in `out/<slug>/board/` at full size, and run the storyboard checklist
-in `references/look.md` honestly, shot by shot. Write down what fails, fix it, re-render just those shots
-(`stills.mjs <slug> S3 S7`), rebuild the sheet and look again. Repeat until it passes. Check `references/traps.md`
-for the failure you're seeing before inventing a fix. If the person is in the loop, show them the board now and
-take their notes before animating.
-
-### 6. Animate
-
-Bring each shot to life from its key pose: `poseAt` keys with anticipation, holds and overshoot, `faceAt` for
-expressions, camera moves with `kf`, the power's look, the `fx`. Then render a draft and check the motion:
-
-```bash
-python <skill>/scripts/master.py <slug>
-python <skill>/scripts/motiongrid.py <slug> S2 S5
-node <skill>/scripts/stills.mjs <slug> --frames 120 240
-```
-
-Read the grids like a flipbook against the motion checklist in `references/look.md`; fix and re-render until it
-reads.
-
-### 7. Sound
-
-Read `references/sound.md`. Add `sound` to `episode.json`: the clips (prompt and length), one event per visible
-action cued to its shot, ambiences per location, the music bed and the levels. Check what the library already has,
-then generate:
-
-```bash
-python <skill>/scripts/sfx.py <slug> --dry
-python <skill>/scripts/sfx.py <slug>
-```
-
-It prints the credits it used and sets the stem volumes in `timeline.json`. Then check that every word stays clear:
-
-```bash
-python <skill>/scripts/mixcheck.py <slug>
-```
-
-It lists the moments, while a word is being spoken, where effects or music come within 3 dB of the voice. A hit that
-illustrates a word lands in the pause just after it, never on it; a bed (a hum, a drone) under a key line comes down;
-if most of the stem crowds the voice, lower `sfx_lu`. Re-run sfx.py and the check until only deliberate overlaps
-remain (a title boom, a turn).
-
-### 8. Master and hand over
-
-```bash
-python <skill>/scripts/master.py <slug>
-```
-
-Renders, brings the mix to -14 LUFS with peaks under -1 dBTP, and writes `out/<slug>/report.json` (length, loudness,
-pace, credits). Watch the final file once through with sound. Hand over `out/<slug>/<slug>-final.mp4` and
-`out/<slug>/storyboard.jpg`, with the length, the ElevenLabs credits used, and anything you'd still improve.
-
-## Where an episode lives
-
-| Path | What |
-|---|---|
-| `src/episodes/<slug>/episode.json` | Everything you write: script, science, shots, edit, fx, sound |
-| `src/episodes/<slug>/shots.tsx`, `index.tsx` | The drawing: one component per shot, the power's look |
-| `src/episodes/<slug>/words.json`, `timeline.json` | Written by voice.py and plan.py (sfx.py adds the volumes) |
-| `public/<slug>/` | voice.wav, sfx.wav, music.wav |
-| `out/<slug>/` | board stills, storyboard.jpg, shotlist.md, motion grids, renders, costs.json, report.json |
-| `library/sfx/` | Every generated sound clip, shared by all episodes |
+The engine keeps **word-level voice sync**: the word-boundary timings from `words.json` still drive every cut and
+cue, exactly as before — now across 9,000 frames instead of 750.

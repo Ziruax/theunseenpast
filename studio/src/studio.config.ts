@@ -1,11 +1,9 @@
-// The studio's settings. Every episode renders at this size and frame rate.
+// The studio's settings. The documentary renders at this size and frame rate; the thumbnail composition
+// is fixed at 1280 x 720 (see Root.tsx and src/thumbnail/).
 export const STUDIO = {
   fps: 30,
   width: 1920,
   height: 1080,
-  /**
-   * A local display face for titles, as a file in public/ (your brand font, say). null uses Bricolage Grotesque
-   * from Google Fonts. Example: { family: 'My Brand Font', file: 'fonts/MyBrandFont.woff2', weight: '200 700' }
-   */
-  titleFont: null as null | { family: string; file: string; weight: string },
-};
+  /** The display face for titles. Cinzel is the channel's act-title face (loaded in engine/fonts.ts). */
+  titleFont: 'Cinzel',
+} as const;

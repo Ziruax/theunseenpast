@@ -1,0 +1,1858 @@
+{
+  "episode_id": "pilot-chimneys",
+  "title": "Why Victorian Children Were Forced to Climb Chimneys",
+  "duration_s": 300,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "acts": [
+    {
+      "act_number": 1,
+      "act_name": "Cold Open",
+      "start_s": 0.0,
+      "end_s": 20.0,
+      "narration": "In February 1875, a twelve-year-old boy was sent up a chimney in Cambridge. His name was George Brewster. He became wedged in a narrow flue inside a hotel wall, and rescuers had to dismantle the brickwork to reach him. By then, he was dead. [S4]",
+      "on_screen_text": [
+        {
+          "text": "CAMBRIDGE, FEBRUARY 1875",
+          "start_s": 1.0,
+          "end_s": 6.0
+        },
+        {
+          "text": "HE DID NOT COME OUT",
+          "start_s": 14.0,
+          "end_s": 19.5
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "By then, he was dead.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 2,
+      "act_name": "Context",
+      "start_s": 20.0,
+      "end_s": 60.0,
+      "narration": "Brewster was a climbing boy — one of the children sent crawling through the flues of Victorian Britain. The trade had already been condemned on paper for a century. In 1775, the surgeon Percivall Pott showed that soot was causing a cancer unique to sweeps. [S5] In 1788, Parliament set a minimum age of eight for climbing boys. [S4] In 1840, it made it illegal for anyone under twenty-one to go up a chimney at all. [S3] Each law, on paper, should have ended the practice. Yet boys were still climbing in the 1870s. [S4] So here is the central question: why did Britain keep sending children up chimneys for nearly a hundred years after it first tried to stop them?",
+      "on_screen_text": [
+        {
+          "text": "1775: SOOT CAUSES CANCER",
+          "start_s": 30.0,
+          "end_s": 34.0
+        },
+        {
+          "text": "1788: MINIMUM AGE EIGHT",
+          "start_s": 36.0,
+          "end_s": 40.0
+        },
+        {
+          "text": "1840: UNDER 21 BANNED",
+          "start_s": 42.0,
+          "end_s": 46.0
+        },
+        {
+          "text": "SO WHY DID IT CONTINUE?",
+          "start_s": 52.0,
+          "end_s": 58.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "soot was causing a cancer unique to sweeps.",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "a minimum age of eight for climbing boys.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "illegal for anyone under twenty-one to go up a chimney",
+          "source_id": "S3"
+        },
+        {
+          "text_span": "boys were still climbing in the 1870s.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 3,
+      "act_name": "How It Worked",
+      "start_s": 60.0,
+      "end_s": 150.0,
+      "narration": "It began with an apprenticeship. Boys were taken young — often from workhouses, or from families too poor to refuse — and bound to a master sweep, who controlled their labour and their climb. [S4] The tools were simple: a scraper, a stiff brush, a metal weight on a short line. But the machine was the house itself — flues of brick and clay, built with tight corners to hold heat, some barely wider than the shoulders of the child sent into them. [S4] A boy worked stripped to the skin, so his clothes would not catch, and climbed on elbows and knees, driving his back and shoulders against the brick to scrape soot from the walls. [S4] At the top, a second sweep might wait to lift him out of the chimney pot. Below, the master caught the falling soot in a sack — soot that was sold, by weight, to brickmakers and farmers. [S4] Meanwhile, a better method already existed. Flexible rod-and-brush sets had been available since the early 1800s, and they cleaned flues without a child inside them. [S6] Master sweeps used them rarely. A boy cost his master little: food, a bed, and a fee every time he was hired out by the job. [S4] Brushes cost money on every call. So the boy went up — and if he stalled in a corner, the evidence given to a Parliamentary committee in 1817 describes masters forcing him upward from below, sometimes by pricking his feet with pins, sometimes by lighting straw in the hearth beneath him. [S2]",
+      "on_screen_text": [
+        {
+          "text": "APPRENTICED YOUNG",
+          "start_s": 62.0,
+          "end_s": 66.0
+        },
+        {
+          "text": "STRIPPED TO THE SKIN",
+          "start_s": 84.0,
+          "end_s": 88.0
+        },
+        {
+          "text": "SOLD BY WEIGHT",
+          "start_s": 104.0,
+          "end_s": 108.0
+        },
+        {
+          "text": "A BRUSH ALREADY EXISTED",
+          "start_s": 112.0,
+          "end_s": 116.0
+        },
+        {
+          "text": "PINS AND LIGHTED STRAW",
+          "start_s": 142.0,
+          "end_s": 147.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "bound to a master sweep",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "barely wider than the shoulders of the child sent into them.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "driving his back and shoulders against the brick to scrape soot",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "soot that was sold, by weight, to brickmakers and farmers.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "Flexible rod-and-brush sets had been available since the early 1800s",
+          "source_id": "S6"
+        },
+        {
+          "text_span": "A boy cost his master little",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "pricking his feet with pins, sometimes by lighting straw",
+          "source_id": "S2"
+        }
+      ]
+    },
+    {
+      "act_number": 4,
+      "act_name": "Hidden Cost",
+      "start_s": 150.0,
+      "end_s": 225.0,
+      "narration": "The cost was written in the boys' bodies. Soot soaked into skin and settled in the lungs; it stunted the chests that were still trying to grow. [S4] The clearest evidence came from surgery. In 1775, Percivall Pott reported that sweeps were developing cancer of the scrotum, caused by soot lodging in the folds of the skin — the first occupational cancer ever identified. [S5] The disease became known as soot wart, and it could kill decades after a man's climbing days were over. [S5] The day-to-day hazards were blunter: burns when a fire was lit too early, choked breath in a soot-filled flue, boys stuck so firmly they had to be dug out of the wall. [S4] In 1817, a Parliamentary committee heard witness after witness describe children maimed, killed, or driven up flues against their will. [S2] None of this was hidden. The reports were printed and the deaths were the subject of inquests — yet the boys still climbed, because the Acts that forbade it left no one with the duty of enforcing them. [S4]",
+      "on_screen_text": [
+        {
+          "text": "THE FIRST OCCUPATIONAL CANCER",
+          "start_s": 164.0,
+          "end_s": 168.0
+        },
+        {
+          "text": "SOOT WART",
+          "start_s": 172.0,
+          "end_s": 176.0
+        },
+        {
+          "text": "1817: PARLIAMENT HEARD IT",
+          "start_s": 196.0,
+          "end_s": 200.0
+        },
+        {
+          "text": "NO ONE ENFORCED THE LAW",
+          "start_s": 216.0,
+          "end_s": 222.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "it stunted the chests that were still trying to grow.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "the first occupational cancer ever identified.",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "known as soot wart",
+          "source_id": "S5"
+        },
+        {
+          "text_span": "boys stuck so firmly they had to be dug out of the wall.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "children maimed, killed, or driven up flues against their will.",
+          "source_id": "S2"
+        },
+        {
+          "text_span": "left no one with the duty of enforcing them.",
+          "source_id": "S4"
+        }
+      ]
+    },
+    {
+      "act_number": 5,
+      "act_name": "Turning Point & Legacy",
+      "start_s": 225.0,
+      "end_s": 300.0,
+      "narration": "George Brewster's death made the failure impossible to ignore. The inquest drew national attention, and public anger reached Parliament, where Lord Shaftesbury — who had fought the trade for decades — promoted a new Bill. [S4] Within months, the Chimney Sweepers Act 1875 became law. It required every master sweep to register with the police, and it made the police responsible for enforcing the rules that earlier Acts had left to no one. [S1] The mechanism changed: not another age limit, but a licence that could be checked, and a force paid to check it. [S1] The trade faded quickly. Mechanical brushes took over the flues, and within a few years the climbing boy had all but vanished. [S4] Occasional illegal cases were still reported into the 1880s — the last echoes of a trade that statute alone had never quite reached. [S4] Sixty years of laws against a visible cruelty changed little on their own. What changed was enforcement: the moment someone was paid to open the door, count the sweeps, and ask who was going up. [S1] George Brewster never climbed again. The boys who came after him did not have to.",
+      "on_screen_text": [
+        {
+          "text": "CHIMNEY SWEEPERS ACT 1875",
+          "start_s": 240.0,
+          "end_s": 245.0
+        },
+        {
+          "text": "REGISTERED WITH POLICE",
+          "start_s": 250.0,
+          "end_s": 254.0
+        },
+        {
+          "text": "THE LAST CLIMBING BOYS",
+          "start_s": 274.0,
+          "end_s": 278.0
+        },
+        {
+          "text": "FEBRUARY 1875",
+          "start_s": 295.0,
+          "end_s": 299.0
+        }
+      ],
+      "citations": [
+        {
+          "text_span": "Lord Shaftesbury — who had fought the trade for decades — promoted a new Bill.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "register with the police",
+          "source_id": "S1"
+        },
+        {
+          "text_span": "a licence that could be checked",
+          "source_id": "S1"
+        },
+        {
+          "text_span": "the climbing boy had all but vanished.",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "Occasional illegal cases were still reported into the 1880s",
+          "source_id": "S4"
+        },
+        {
+          "text_span": "count the sweeps, and ask who was going up.",
+          "source_id": "S1"
+        }
+      ]
+    }
+  ],
+  "shots": [
+    {
+      "shot_id": "SH001",
+      "start_s": 0.0,
+      "end_s": 3.0,
+      "duration_s": 3.0,
+      "act": 1,
+      "visual_type": "new_scene",
+      "description": "Wide flat-vector skyline of Victorian Cambridge at first light: blocky terraced rooftops, rows of chimney pots against a parchment sky. One hotel rooftop sits as the focal point; no figures yet.",
+      "characters": [],
+      "environment": "Cambridge rooftops, dawn",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_street_dawn",
+        "church_bell"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH002",
+      "start_s": 3.0,
+      "end_s": 6.0,
+      "duration_s": 3.0,
+      "act": 1,
+      "visual_type": "shot_size_change",
+      "description": "Roof-level: a tiny block-figure boy in a tattered shirt and cap stands at the mouth of a chimney pot, his small silhouette framed by the pot rim; one crimson accent on his cap.",
+      "characters": [
+        "George Brewster"
+      ],
+      "environment": "Hotel rooftop",
+      "camera_move": "hold",
+      "sfx": [
+        "amb_rooftop_wind",
+        "footsteps_scuff"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH003",
+      "start_s": 6.0,
+      "end_s": 9.0,
+      "duration_s": 3.0,
+      "act": 1,
+      "visual_type": "map_change",
+      "description": "Cutaway diagram: interior wall of the hotel opened like a section, a brick flue zig-zagging upward through the masonry; the boy's silhouette wedged mid-flue is the single focal point.",
+      "characters": [
+        "George Brewster"
+      ],
+      "environment": "Hotel wall cross-section",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_indoor_fire",
+        "brick_scrape"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH004",
+      "start_s": 9.0,
+      "end_s": 12.0,
+      "duration_s": 3.0,
+      "act": 1,
+      "visual_type": "shot_size_change",
+      "description": "Detail push on the wedged boy: arms raised above his head, shoulders jammed against brick, soot particles drifting down past him in a single gradient light shaft.",
+      "characters": [
+        "George Brewster"
+      ],
+      "environment": "Inside flue",
+      "camera_move": "detail_push",
+      "sfx": [
+        "soot_crumble",
+        "strained_breath"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH005",
+      "start_s": 12.0,
+      "end_s": 14.5,
+      "duration_s": 2.5,
+      "act": 1,
+      "visual_type": "new_scene",
+      "description": "Hearth below: three rescuer block-silhouettes tearing into the brickwork with picks and a crowbar, lantern glow carving warm gradients out of the darkness.",
+      "characters": [
+        "Rescuers"
+      ],
+      "environment": "Hotel hearth, opened wall",
+      "camera_move": "hold",
+      "sfx": [
+        "brick_break",
+        "amb_crowd_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH006",
+      "start_s": 14.5,
+      "end_s": 17.0,
+      "duration_s": 2.5,
+      "act": 1,
+      "visual_type": "shot_size_change",
+      "description": "The opened wall: the boy pulled out limp while rescuers kneel around him; single lantern light source, heavy shadow filling the room, one crimson accent on the broken brick edge.",
+      "characters": [
+        "George Brewster",
+        "Rescuers"
+      ],
+      "environment": "Hotel hearth, opened wall",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_crowd_murmur",
+        "brick_break"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH007",
+      "start_s": 17.0,
+      "end_s": 20.0,
+      "duration_s": 3.0,
+      "act": 1,
+      "visual_type": "document_highlight",
+      "description": "Parchment newspaper page, charcoal ink: headline block 'CLIMBING BOY DEAD' highlighted with a bone-white bar; column rules and date line readable; no figures.",
+      "characters": [],
+      "environment": "Newspaper close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH008",
+      "start_s": 20.0,
+      "end_s": 24.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "new_scene",
+      "description": "London street, 1840s: a master sweep in brushed top hat and soot-stained tailcoat leads a small boy carrying a coil of brush and scraper down a cobbled terrace; background houses recede in overlapping planes.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "London street",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_street",
+        "horse_hooves"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH009",
+      "start_s": 24.0,
+      "end_s": 28.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "shot_size_change",
+      "description": "Close on the boy Thomas: soot-blackened cheeks, cap pulled low, brush coil over one shoulder; simple dot eyes and line mouth, readable at 200px.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "London street",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_street"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH010",
+      "start_s": 28.0,
+      "end_s": 32.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "new_scene",
+      "description": "Surgeon's study, 1775: Percivall Pott as a block silhouette at a writing desk with quill and candle; a labelled jar of soot on the desk; lamp gradient from the left.",
+      "characters": [
+        "Percivall Pott"
+      ],
+      "environment": "Surgeon's study",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_room",
+        "quill_scratch"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH011",
+      "start_s": 32.0,
+      "end_s": 36.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "line_reveal",
+      "description": "A medical-plate outline drawn in stroke-by-stroke lines beside Pott's silhouette: a schematic body diagram with the soot-linked cancer marked, label 'SOOT WART'; restrained, anatomical style.",
+      "characters": [
+        "Percivall Pott"
+      ],
+      "environment": "Surgeon's study",
+      "camera_move": "detail_push",
+      "sfx": [
+        "quill_scratch"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH012",
+      "start_s": 36.0,
+      "end_s": 39.0,
+      "duration_s": 3.0,
+      "act": 2,
+      "visual_type": "document_highlight",
+      "description": "Parchment copy of the Chimney Sweepers Act 1788: the clause line highlighted, bronze wax seal at the foot; stone-arch border drawn with two stroke lines.",
+      "characters": [],
+      "environment": "Document close-up",
+      "camera_move": "hold",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH013",
+      "start_s": 39.0,
+      "end_s": 42.0,
+      "duration_s": 3.0,
+      "act": 2,
+      "visual_type": "new_scene",
+      "description": "Parliament chamber sketch: tiered rows of block silhouettes in dark coats, one member standing to speak; the mace as a small bronze block on the table.",
+      "characters": [
+        "Members of Parliament"
+      ],
+      "environment": "Parliament chamber",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_parliament_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH014",
+      "start_s": 42.0,
+      "end_s": 45.0,
+      "duration_s": 3.0,
+      "act": 2,
+      "visual_type": "document_highlight",
+      "description": "Parchment copy of the 1840 Act: the line 'no person under twenty-one' highlighted; ironwork border motif echoing chimney grates.",
+      "characters": [],
+      "environment": "Document close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S3"
+    },
+    {
+      "shot_id": "SH015",
+      "start_s": 45.0,
+      "end_s": 49.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "map_change",
+      "description": "Diagram state change: the same street corner redrawn in 1860s dress detail while a boy still enters the flue mouth; a calendar block flips from '1840' to '1860s'; parchment tint deepens one step.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Street corner, time-lapse diagram",
+      "camera_move": "hold",
+      "sfx": [
+        "amb_street",
+        "clock_tick"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH016",
+      "start_s": 49.0,
+      "end_s": 52.0,
+      "duration_s": 3.0,
+      "act": 2,
+      "visual_type": "new_scene",
+      "description": "Composite character introduction: Thomas stands full-figure on a rooftop ridge at dusk, brush in hand, lamplight gradient behind; a small caption block reads 'RECONSTRUCTED COMPOSITE'.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop, dusk",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH017",
+      "start_s": 52.0,
+      "end_s": 56.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "shot_size_change",
+      "description": "Close on Thomas's face above the rooftops, soot-edged and streaked, a forest of chimney pots behind him; single focal point, crimson accent on one distant glow.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop, dusk",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH018",
+      "start_s": 56.0,
+      "end_s": 60.0,
+      "duration_s": 4.0,
+      "act": 2,
+      "visual_type": "new_scene",
+      "description": "Thomas turns toward the mouth of an open flue, brush lowered; the parchment vignette border darkens at the frame edges, drawing the eye to the black flue mouth.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop at flue mouth",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind",
+        "soot_crumble"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH019",
+      "start_s": 60.0,
+      "end_s": 63.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Workhouse gate, 1830s: iron gates, a beadle's block silhouette handing a small boy to a top-hatted master sweep; a ledger under the beadle's arm; parchment sky above the wall.",
+      "characters": [
+        "Beadle",
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Workhouse gate",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_street",
+        "gate_creak"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH020",
+      "start_s": 63.5,
+      "end_s": 67.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "Close-up: a small hand gripping a man's soot-stained sleeve; the rolled apprenticeship indenture paper in the other hand, tied with string.",
+      "characters": [
+        "Thomas",
+        "Master sweep"
+      ],
+      "environment": "Workhouse gate",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH021",
+      "start_s": 67.0,
+      "end_s": 70.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Master's workshop interior: brushes, scrapers and weighted ropes drawn in stroke-by-stroke on a pegboard wall; bristle texture in bronze; the boy waits small in the doorway.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Master sweep's workshop",
+      "camera_move": "slow_push",
+      "sfx": [
+        "tool_rattle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH022",
+      "start_s": 70.5,
+      "end_s": 74.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "map_change",
+      "description": "Whole-house cross-section diagram: a terraced townhouse cut open, flues zig-zagging through the walls into stacked chimney pots; room outlines in bronze, flues in charcoal.",
+      "characters": [],
+      "environment": "Townhouse cross-section",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH023",
+      "start_s": 74.0,
+      "end_s": 77.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "map_change",
+      "description": "Same cross-section diagram: dimension lines highlight the flue widths; one flue marked with a bracket showing a gap barely wider than a child's shoulders, one crimson dimension line.",
+      "characters": [],
+      "environment": "Townhouse cross-section",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH024",
+      "start_s": 77.5,
+      "end_s": 81.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "At the hearth: the master strips the boy of jacket and shirt before the flue mouth; the boy stands in rough trousers, barefoot, brush and scraper laid out beside him.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Hearth, ground floor",
+      "camera_move": "hold",
+      "sfx": [
+        "cloth_rustle",
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH025",
+      "start_s": 81.0,
+      "end_s": 84.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "Close on bare feet and scraped knees on the brick hearth stone; soot dust hanging in the gradient light from a single window.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Hearth, ground floor",
+      "camera_move": "detail_push",
+      "sfx": [
+        "footsteps_scuff"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH026",
+      "start_s": 84.0,
+      "end_s": 87.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Inside the flue, cutaway view: the boy crawling upward on elbows and knees, back pressed against brick, scraper in his right hand; near-darkness with one light shaft falling from the pot above.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Inside flue",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_flue",
+        "brick_scrape"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH027",
+      "start_s": 87.5,
+      "end_s": 90.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Tool detail: the scraper blade drawn in stroke-by-stroke as it bites the brick, soot flakes rendered as falling vector particles.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Inside flue, tool detail",
+      "camera_move": "detail_push",
+      "sfx": [
+        "tool_scrape",
+        "soot_crumble"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH028",
+      "start_s": 90.5,
+      "end_s": 93.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "map_change",
+      "description": "Flue diagram state change: the cutaway shows a right-angle corner; the boy figure repositions shoulders in two pose keys as the corner section highlights.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Flue corner diagram",
+      "camera_move": "hold",
+      "sfx": [
+        "brick_scrape",
+        "strained_breath"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH029",
+      "start_s": 93.5,
+      "end_s": 97.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Line-reveal: the boy's head and shoulders emerge from a chimney pot on the roofline, drawn stroke-by-stroke; a skyline of pots and smoke gradients behind.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop, chimney pot",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH030",
+      "start_s": 97.0,
+      "end_s": 100.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "Close on the boy at the pot rim, face blackened except for pale eye-rings, dot eyes blinking once; the town laid out small below.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop, chimney pot",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH031",
+      "start_s": 100.0,
+      "end_s": 103.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Hearth below: the master sweep holds a wide sack open as soot cascades down the flue, rendered as a falling vector particle stream.",
+      "characters": [
+        "Master sweep"
+      ],
+      "environment": "Hearth, ground floor",
+      "camera_move": "hold",
+      "sfx": [
+        "soot_crumble",
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH032",
+      "start_s": 103.0,
+      "end_s": 106.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Market scene drawn as a line reveal: weighing scales balancing a soot sack against weights, a brickmaker and a farmer waiting with bronze coins.",
+      "characters": [
+        "Master sweep",
+        "Brickmaker",
+        "Farmer"
+      ],
+      "environment": "Market square",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "coin_clink",
+        "amb_market"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH033",
+      "start_s": 106.0,
+      "end_s": 109.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Workshop wall, stroke-by-stroke: a flexible rod-and-brush sweeping set assembled section by section, with a small label plate 'NEW METHOD'.",
+      "characters": [],
+      "environment": "Master sweep's workshop",
+      "camera_move": "slow_push",
+      "sfx": [
+        "tool_rattle"
+      ],
+      "source_id": "S6"
+    },
+    {
+      "shot_id": "SH034",
+      "start_s": 109.0,
+      "end_s": 112.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "map_change",
+      "description": "Cross-section diagram state change: the mechanical brush sweeps a flue clean, arrows tracing the rod path along every corner, no child figure inside.",
+      "characters": [],
+      "environment": "Townhouse cross-section",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "brush_rod",
+        "amb_indoor_fire"
+      ],
+      "source_id": "S6"
+    },
+    {
+      "shot_id": "SH035",
+      "start_s": 112.0,
+      "end_s": 115.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Master's counting desk: the sweep totals coins at an open ledger while a boy waits small in the doorway; the ledger shows columns of chimney jobs.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Master's parlour, counting desk",
+      "camera_move": "slow_push",
+      "sfx": [
+        "coin_clink",
+        "quill_scratch"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH036",
+      "start_s": 115.5,
+      "end_s": 118.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "Close on the ledger page: rows of chimney counts and fees, quill ticks drying; the boy's silhouette reflected faintly in the inkwell.",
+      "characters": [
+        "Master sweep"
+      ],
+      "environment": "Master's parlour, counting desk",
+      "camera_move": "detail_push",
+      "sfx": [
+        "quill_scratch"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH037",
+      "start_s": 118.5,
+      "end_s": 121.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Roofline at dusk: two boys at chimney pots on adjacent rooftops while the master watches from the street below with his hand raised to the next job.",
+      "characters": [
+        "Thomas",
+        "Master sweep"
+      ],
+      "environment": "Rooftops, dusk",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_rooftop_wind",
+        "church_bell"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH038",
+      "start_s": 121.5,
+      "end_s": 125.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Inside a flue, cutaway: the boy wedged at a corner, arms above his head pushing upward; pose keys show strain; darkness with a crimson accent where light enters from the pot above.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Inside flue",
+      "camera_move": "slow_push",
+      "sfx": [
+        "strained_breath",
+        "brick_scrape"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH039",
+      "start_s": 125.0,
+      "end_s": 128.5,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "From below in the hearth: the master's block silhouette thrusting a brush up the flue toward the boy's bare feet, his coat swinging; the boy's soles the focal point.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Hearth, looking up flue",
+      "camera_move": "detail_push",
+      "sfx": [
+        "brush_rod",
+        "shout_muffled"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH040",
+      "start_s": 128.5,
+      "end_s": 131.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "line_reveal",
+      "description": "Line-reveal: the cover of the 1817 Parliamentary report drawn in strokes, with an inset sketch of a committee room and the plate 'SELECT COMMITTEE, 1817'.",
+      "characters": [],
+      "environment": "Document close-up",
+      "camera_move": "slow_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH041",
+      "start_s": 131.5,
+      "end_s": 134.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "document_highlight",
+      "description": "Parchment evidence page from the 1817 report: the line describing boys driven up flues against their will highlighted; a witness silhouette stands at a lectern behind the page.",
+      "characters": [],
+      "environment": "Committee evidence page",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle",
+        "amb_parliament_murmur"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH042",
+      "start_s": 134.5,
+      "end_s": 137.5,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Committee room: rows of block figures in dark coats, one witness standing to give evidence; on the table before them a child's brush and scraper lie as exhibits.",
+      "characters": [
+        "Witnesses",
+        "Members of Parliament"
+      ],
+      "environment": "Committee room",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_parliament_murmur"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH043",
+      "start_s": 137.5,
+      "end_s": 141.0,
+      "duration_s": 3.5,
+      "act": 3,
+      "visual_type": "map_change",
+      "description": "Cutaway flue diagram: pins and a small flame at the hearth base, arrows forcing the boy figure upward through the flue; the flame is the single crimson accent.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Flue diagram",
+      "camera_move": "detail_push",
+      "sfx": [
+        "flame_whoosh",
+        "strained_breath"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH044",
+      "start_s": 141.0,
+      "end_s": 144.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "shot_size_change",
+      "description": "Extreme close inside the flue: the boy's face, dot eyes wide, soot falling past his cheeks; one weak light source from above.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Inside flue",
+      "camera_move": "detail_push",
+      "sfx": [
+        "strained_breath",
+        "soot_crumble"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH045",
+      "start_s": 144.0,
+      "end_s": 147.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "The boy hauls himself out of the chimney pot and collapses onto the roof slates, brush beside him; first light of dawn on the parchment sky.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop, dawn",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind",
+        "body_thud"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH046",
+      "start_s": 147.0,
+      "end_s": 150.0,
+      "duration_s": 3.0,
+      "act": 3,
+      "visual_type": "new_scene",
+      "description": "Wide: the master leads the boy to the next house, brush over the boy's shoulder; terraced roofs repeat into a fog gradient, five planes deep.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Rooftops, morning fog",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "footsteps_scuff",
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH047",
+      "start_s": 150.0,
+      "end_s": 153.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Squat at night: boys asleep on soot sacks beside a dead hearth, brushes stacked by the wall, one candle stub; the master's boots visible through the door gap.",
+      "characters": [
+        "Thomas",
+        "Climbing boys"
+      ],
+      "environment": "Master's cellar squat",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_cellar",
+        "sleep_breathing"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH048",
+      "start_s": 153.5,
+      "end_s": 157.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "shot_size_change",
+      "description": "Close: a boy's open hands, cracked and blackened, nails rimmed with soot, curled around brush bristles.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Master's cellar squat",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_cellar"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH049",
+      "start_s": 157.0,
+      "end_s": 160.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "line_reveal",
+      "description": "Morning: the boy coughs into a rag by the hearth, the soot cloud rendered as a drifting vector particle reveal; his full sack waits behind him.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Hearth, morning",
+      "camera_move": "hold",
+      "sfx": [
+        "cough",
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH050",
+      "start_s": 160.5,
+      "end_s": 164.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Doctor's surgery: Percivall Pott's block silhouette examines an adult former sweep against the light; an anatomical plate hangs on the wall; lamp gradient from the left.",
+      "characters": [
+        "Percivall Pott",
+        "Former sweep"
+      ],
+      "environment": "Surgeon's surgery",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_room"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH051",
+      "start_s": 164.0,
+      "end_s": 167.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "document_highlight",
+      "description": "1775 medical plate: the label 'SOOT WART' highlighted on the parchment, Pott's citation line beneath it in small caps.",
+      "characters": [],
+      "environment": "Medical plate close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH052",
+      "start_s": 167.5,
+      "end_s": 171.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "line_reveal",
+      "description": "Line-reveal diagram: a human silhouette drawn stroke-by-stroke with soot deposits marked at the lung and at the skin folds, each mark appearing as a small charcoal cluster.",
+      "characters": [],
+      "environment": "Diagram on parchment",
+      "camera_move": "slow_push",
+      "sfx": [
+        "quill_scratch"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH053",
+      "start_s": 171.0,
+      "end_s": 174.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Years later: a grown former climbing boy, shoulders rounded, coughing at a workbench; his old child-size brush hangs on the wall behind him as the crimson accent.",
+      "characters": [
+        "Former sweep"
+      ],
+      "environment": "Workshop, later years",
+      "camera_move": "slow_push",
+      "sfx": [
+        "cough",
+        "amb_room"
+      ],
+      "source_id": "S5"
+    },
+    {
+      "shot_id": "SH054",
+      "start_s": 174.5,
+      "end_s": 178.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "map_change",
+      "description": "Cutaway flue diagram: a fire lit at the base while the boy figure is still inside; a heat gradient rises up the flue; the flame is the single crimson accent.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Flue diagram",
+      "camera_move": "detail_push",
+      "sfx": [
+        "flame_whoosh",
+        "shout_muffled"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH055",
+      "start_s": 178.0,
+      "end_s": 181.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "map_change",
+      "description": "Diagram state change: a chimney pot section fills with soot particles then clears as a boy figure emerges; passers-by below raise collars against falling soot.",
+      "characters": [
+        "Thomas"
+      ],
+      "environment": "Rooftop diagram",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "soot_crumble",
+        "amb_street"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH056",
+      "start_s": 181.5,
+      "end_s": 185.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Rescue: rescuers picking through brickwork toward a flue from both sides of the wall, lanterns held high, picks mid-swing; plaster dust in the light.",
+      "characters": [
+        "Rescuers"
+      ],
+      "environment": "House interior, opened wall",
+      "camera_move": "slow_push",
+      "sfx": [
+        "brick_break",
+        "amb_crowd_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH057",
+      "start_s": 185.0,
+      "end_s": 188.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "shot_size_change",
+      "description": "Close: the boy's hand protruding from the opened brickwork, a rescuer's hand gripping it; the lantern flame is the single crimson accent.",
+      "characters": [
+        "Boy in flue (composite depiction)",
+        "Rescuers"
+      ],
+      "environment": "House interior, opened wall",
+      "camera_move": "detail_push",
+      "sfx": [
+        "brick_break",
+        "strained_breath"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH058",
+      "start_s": 188.5,
+      "end_s": 192.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "document_highlight",
+      "description": "Inquest notice on parchment: headline block 'BOY KILLED IN FLUE' highlighted, with the date line and coroner's name beneath in small text.",
+      "characters": [],
+      "environment": "Inquest notice close-up",
+      "camera_move": "hold",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH059",
+      "start_s": 192.0,
+      "end_s": 195.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "map_change",
+      "description": "Broadside diagram: rows of small charcoal blocks stack up one by one, representing repeated reports of climbing boys killed or maimed; the newest block lands in crimson.",
+      "characters": [],
+      "environment": "Broadside chart",
+      "camera_move": "slow_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH060",
+      "start_s": 195.5,
+      "end_s": 199.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "document_highlight",
+      "description": "Committee report page again: the line paraphrasing 'maimed and killed' evidence highlighted; marginal witness initials visible.",
+      "characters": [],
+      "environment": "Committee evidence page",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S2"
+    },
+    {
+      "shot_id": "SH061",
+      "start_s": 199.0,
+      "end_s": 202.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Street: a master sweep with three boys in file behind him takes coins from a householder at the door while the smallest boy waits with the sack.",
+      "characters": [
+        "Master sweep",
+        "Climbing boys",
+        "Householder"
+      ],
+      "environment": "Townhouse doorway",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "coin_clink",
+        "amb_street"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH062",
+      "start_s": 202.5,
+      "end_s": 206.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "shot_size_change",
+      "description": "Close on coins dropping into the master's gloved palm; the boy's small silhouette blurred behind in the doorway.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Townhouse doorway",
+      "camera_move": "detail_push",
+      "sfx": [
+        "coin_clink"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH063",
+      "start_s": 206.0,
+      "end_s": 209.5,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "shot_size_change",
+      "description": "Master's parlour: the well-fed sweep in a good coat beside a bright fire while the boy stands on the threshold with his sack; chiaroscuro contrast between the two figures.",
+      "characters": [
+        "Master sweep",
+        "Thomas"
+      ],
+      "environment": "Master's parlour",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_indoor_fire"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH064",
+      "start_s": 209.5,
+      "end_s": 213.0,
+      "duration_s": 3.5,
+      "act": 4,
+      "visual_type": "shot_size_change",
+      "description": "Close: the boy's soot-stiff shirt hanging on a peg beside the master's brushed top hat; one light source, deep shadow between them.",
+      "characters": [
+        "Thomas",
+        "Master sweep"
+      ],
+      "environment": "Master's hallway",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_room"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH065",
+      "start_s": 213.0,
+      "end_s": 216.0,
+      "duration_s": 3.0,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Parish notice board: a placard of the 1840 Act nailed up, weathered; beneath it two master sweeps talk and do not look up.",
+      "characters": [
+        "Master sweeps"
+      ],
+      "environment": "Parish notice board, street",
+      "camera_move": "hold",
+      "sfx": [
+        "amb_street"
+      ],
+      "source_id": "S3"
+    },
+    {
+      "shot_id": "SH066",
+      "start_s": 216.0,
+      "end_s": 219.0,
+      "duration_s": 3.0,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "The same rooftop as Act 3, years later by dress and chimney detail: another small boy still climbing into the pot at dusk; a calendar block reads '1860s'.",
+      "characters": [
+        "Climbing boy"
+      ],
+      "environment": "Rooftop, dusk",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH067",
+      "start_s": 219.0,
+      "end_s": 222.0,
+      "duration_s": 3.0,
+      "act": 4,
+      "visual_type": "document_highlight",
+      "description": "Statute book spread: three Act titles listed — 1788, 1840, 1864 — their lines highlighted in sequence, with a marginal note that penalties went unenforced.",
+      "characters": [],
+      "environment": "Statute book close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH068",
+      "start_s": 222.0,
+      "end_s": 225.0,
+      "duration_s": 3.0,
+      "act": 4,
+      "visual_type": "new_scene",
+      "description": "Empty rooftop at night: a brush leaning against a cold chimney pot, no boy in frame; a parchment moon; one distant crimson glow from a chimney far off.",
+      "characters": [],
+      "environment": "Rooftop, night",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH069",
+      "start_s": 225.0,
+      "end_s": 229.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "Cambridge street, February 1875: a hotel facade, a crowd of gesticulating block silhouettes gathered at the door, breath visible in cold air; light snow gradient.",
+      "characters": [
+        "Crowd"
+      ],
+      "environment": "Cambridge street, hotel",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_crowd_murmur",
+        "amb_street_winter"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH070",
+      "start_s": 229.0,
+      "end_s": 233.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "shot_size_change",
+      "description": "Close at the hotel doorway: the master sweep held back by two men, his cap crushed in his hands; the door frame fills the frame edges.",
+      "characters": [
+        "Master sweep",
+        "Bystanders"
+      ],
+      "environment": "Hotel doorway",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_crowd_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH071",
+      "start_s": 233.0,
+      "end_s": 237.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "document_highlight",
+      "description": "Newspaper front page: headline block 'CLIMBING BOY DEAD AT CAMBRIDGE' highlighted with a bone bar; dense text columns; the paper held by a silhouetted reader.",
+      "characters": [],
+      "environment": "Newspaper close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle",
+        "amb_street"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH072",
+      "start_s": 237.0,
+      "end_s": 241.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "Parliament chamber: Lord Shaftesbury's tall silhouette standing at the dispatch box, rows of peers behind, mace on the table; lamp gradient from the clerks' desk.",
+      "characters": [
+        "Lord Shaftesbury",
+        "Members of Parliament"
+      ],
+      "environment": "Parliament chamber",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_parliament_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH073",
+      "start_s": 241.0,
+      "end_s": 245.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "shot_size_change",
+      "description": "Close on Shaftesbury: top hat on the box beside his gloved hand pressed flat on the wood; simple line mouth set; single focal point.",
+      "characters": [
+        "Lord Shaftesbury"
+      ],
+      "environment": "Parliament chamber",
+      "camera_move": "detail_push",
+      "sfx": [
+        "amb_parliament_murmur"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH074",
+      "start_s": 245.0,
+      "end_s": 249.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "line_reveal",
+      "description": "Line-reveal: the title 'CHIMNEY SWEEPERS ACT 1875' drawn stroke-by-stroke on parchment, a simplified royal-arms block assembling at the top.",
+      "characters": [],
+      "environment": "Act parchment close-up",
+      "camera_move": "slow_push",
+      "sfx": [
+        "quill_scratch"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH075",
+      "start_s": 249.0,
+      "end_s": 253.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "document_highlight",
+      "description": "Act clause line highlighted: 'every sweep to be registered' underlined in bone-white; bronze wax seal at the foot of the sheet.",
+      "characters": [],
+      "environment": "Act parchment close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH076",
+      "start_s": 253.0,
+      "end_s": 257.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "map_change",
+      "description": "Diagram: a register ledger filling row by row — each line a master sweep's name; a police silhouette stamps each entry; the stamp lands as a small red-brown block.",
+      "characters": [
+        "Police constable"
+      ],
+      "environment": "Register ledger diagram",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "stamp_thud",
+        "quill_scratch"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH077",
+      "start_s": 257.0,
+      "end_s": 261.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "A police constable silhouette at a workshop door checking a licence paper against the master sweep standing in the doorway; brush stock visible behind.",
+      "characters": [
+        "Police constable",
+        "Master sweep"
+      ],
+      "environment": "Workshop doorway",
+      "camera_move": "hold",
+      "sfx": [
+        "footsteps_scuff",
+        "paper_rustle"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH078",
+      "start_s": 261.0,
+      "end_s": 265.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "shot_size_change",
+      "description": "Close: the licence paper with a police stamp block and the words 'REGISTERED SWEEP'; a quill laid beside it on the sill.",
+      "characters": [],
+      "environment": "Licence paper close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH079",
+      "start_s": 265.0,
+      "end_s": 269.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "Workshop yard: two adult sweeps hauling long rod-and-brush sets onto a handcart; no boys present; tool shadows long in morning light.",
+      "characters": [
+        "Master sweeps"
+      ],
+      "environment": "Workshop yard",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "tool_rattle",
+        "cart_wheels"
+      ],
+      "source_id": "S6"
+    },
+    {
+      "shot_id": "SH080",
+      "start_s": 269.0,
+      "end_s": 273.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "map_change",
+      "description": "Cross-section diagram: the mechanical brush sweeps the full flue path corner to corner, soot particles clearing behind it; the child figure is absent from the diagram.",
+      "characters": [],
+      "environment": "Townhouse cross-section",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "brush_rod"
+      ],
+      "source_id": "S6"
+    },
+    {
+      "shot_id": "SH081",
+      "start_s": 273.0,
+      "end_s": 277.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "Rooftop: a full-height adult sweep working a chimney pot from above with a rod brush; dawn sky, several pots already swept and capped with wire brushes.",
+      "characters": [
+        "Adult sweep"
+      ],
+      "environment": "Rooftop, dawn",
+      "camera_move": "slow_push",
+      "sfx": [
+        "brush_rod",
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S6"
+    },
+    {
+      "shot_id": "SH082",
+      "start_s": 277.0,
+      "end_s": 281.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "document_highlight",
+      "description": "1880s trade newspaper page: a small advertisement block 'MECHANICAL SWEEPING — NO BOYS EMPLOYED' highlighted on the parchment.",
+      "characters": [],
+      "environment": "Trade newspaper close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH083",
+      "start_s": 281.0,
+      "end_s": 285.0,
+      "duration_s": 4.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "Wide rooftop panorama: several adult sweeps working pots across the skyline, steam and smoke rising; no children anywhere; parchment sun low.",
+      "characters": [
+        "Adult sweeps"
+      ],
+      "environment": "City skyline panorama",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_rooftop_wind",
+        "church_bell"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH084",
+      "start_s": 285.0,
+      "end_s": 288.0,
+      "duration_s": 3.0,
+      "act": 5,
+      "visual_type": "shot_size_change",
+      "description": "Close: a child's small boots and hand brush hung on a workshop peg, dust settling in a gradient light shaft; everything else out of frame.",
+      "characters": [],
+      "environment": "Workshop interior",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_room"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH085",
+      "start_s": 288.0,
+      "end_s": 291.0,
+      "duration_s": 3.0,
+      "act": 5,
+      "visual_type": "document_highlight",
+      "description": "Later report page: the line noting occasional illegal cases still reported into the 1880s highlighted in the parchment margin.",
+      "characters": [],
+      "environment": "Report page close-up",
+      "camera_move": "detail_push",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH086",
+      "start_s": 291.0,
+      "end_s": 294.0,
+      "duration_s": 3.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "A shelf of bound statute volumes, spines lettered 1788 to 1875; the 1875 spine carries the single crimson accent in the frame.",
+      "characters": [],
+      "environment": "Statute shelf",
+      "camera_move": "lateral_pan",
+      "sfx": [
+        "amb_room"
+      ],
+      "source_id": "S1"
+    },
+    {
+      "shot_id": "SH087",
+      "start_s": 294.0,
+      "end_s": 297.0,
+      "duration_s": 3.0,
+      "act": 5,
+      "visual_type": "new_scene",
+      "description": "London skyline of chimney pots at dusk, thin smoke rising from well-tended fires; rooftops recede in five planes; parchment sky, one warm window light.",
+      "characters": [],
+      "environment": "City skyline, dusk",
+      "camera_move": "slow_push",
+      "sfx": [
+        "amb_rooftop_wind"
+      ],
+      "source_id": "S4"
+    },
+    {
+      "shot_id": "SH088",
+      "start_s": 297.0,
+      "end_s": 300.0,
+      "duration_s": 3.0,
+      "act": 5,
+      "visual_type": "document_highlight",
+      "description": "Final frame: a parchment record line highlighted — 'GEORGE BREWSTER, CAMBRIDGE, FEBRUARY 1875' — the text holds, then fades to bone.",
+      "characters": [],
+      "environment": "Record close-up",
+      "camera_move": "hold",
+      "sfx": [
+        "paper_rustle"
+      ],
+      "source_id": "S4"
+    }
+  ],
+  "audio": {
+    "voice_path": "studio/src/episodes/pilot-chimneys/voice.mp3",
+    "word_timings_path": "studio/src/episodes/pilot-chimneys/words.json",
+    "mix_path": "studio/src/episodes/pilot-chimneys/mix.mp3"
+  }
+}

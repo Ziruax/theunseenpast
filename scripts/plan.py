@@ -1,126 +1,194 @@
-"""Step 3: the shot list on the voice. Resolves the edit's cues against the word timings and writes the timeline.
+"""Stage 3: the shot list. Reads the five-act script (and the word timings, when voice.py has
+run) and lays shots out on the 2-3 s grid to produce shots.json for the storyboard and engine.
 
-python <skill>/scripts/plan.py <slug>
-Reads  src/episodes/<slug>/episode.json (shots, edit, fx) and words.json (from voice.py)
-Writes src/episodes/<slug>/timeline.json (the engine reads it) and out/<slug>/shotlist.md, and prints the pace.
+python3 scripts/plan.py <slug> [--target-dur 3.2]
+Reads  src/episodes/<slug>/script.json   (five acts: narration, citations, optional
+       "environment" and "characters" per act)
+       src/episodes/<slug>/research.json (source ids, for the source_id field)
+       src/episodes/<slug>/words.json    (optional; gives real act boundaries from the voice)
+Writes src/episodes/<slug>/shots.json    (schema: schemas/shots.schema.json)
+       out/<slug>/shotlist.md            (human-readable review copy) + prints the pace
 
-An edit entry:  {"shot": "S4", "at": "homework", "look": "copy"}
-  at       when the cut lands: a word ("homework", "paste#2" = its 2nd occurrence after the previous cut), "+18" (frames
-           after the previous cut), "s:4.2", "f:126". A word cut lands `lead` frames (default 2) before the word.
-  reverse  true plays the shot's clock backwards, from where it was last seen ("from") to "to" (default 0)
-  from     the shot's clock at the cut (default 0 forward)
-  look     a power look the episode defines (rewind, copy...): grade and overlay while it runs
-The episode ends `tail` seconds (default 0.9) after the last word, or at "end": "<cue>".
+Grid rules (spec Part 1 / stage-3 prompt): 80-100 shots, every duration <= 4.0 s, average
+2-3 s, act boundaries never crossed by a shot, visual_type distribution targeted at
+~30% new_scene / 25% shot_size_change / 20% line_reveal / 15% map_change / 10%
+document_highlight, and SFX suggestions per shot derived from the act's environment.
+
+Act boundaries come from words.json when present (the last word of each act's narration ends
+the act; the final act always ends at the script's end_s). Without words.json the script's
+nominal start_s/end_s are used — re-run plan.py after voice.py to snap to the real voice.
 """
-import statistics, sys
+from __future__ import annotations
 
-from wi import ep_dir, load_episode, load_json, out_dir, resolve, save_json, find_word, stem
+import argparse
+import random
+import re
+import statistics
+import sys
 
-slug = sys.argv[1]
-ep = load_episode(slug)
-FPS = ep.get('fps', 30)
-LEAD = ep.get('lead', 2)
-words = load_json(ep_dir(slug) / 'words.json', [])
-if not words and any(not str(e['at']).startswith(('f:', 's:', '+')) for e in ep['edit']):
-    raise SystemExit('No words.json yet: run voice.py first (or use f:/s: cues).')
-shots = {s['id']: s for s in ep['shots']}
+from unseenpast import ACT_NAMES, ENV_SFX, ep_file, load_json, out_dir, run_validator, save_json
 
-# ---------------------------------------------------------------- cut points
-starts, wi_prev, prev = [], 0, 0
-for k, e in enumerate(ep['edit']):
-    if e['shot'] not in shots:
-        raise SystemExit(f'Edit entry {k} uses unknown shot {e["shot"]}')
-    at = str(e['at'])
-    if at.startswith(('f:', 's:')):
-        a = resolve(at, words, FPS)
-    elif at.startswith('+'):
-        a = prev + int(at[1:])
-    else:
-        base, _, off = at.partition('+') if '+' in at else (at, '', '0')
-        if '#' in base:
-            w, n = base.split('#')
-            i = find_word(words, w, wi_prev, int(n))
+VISUAL_DIST = [('new_scene', 0.30), ('shot_size_change', 0.25), ('line_reveal', 0.20),
+               ('map_change', 0.15), ('document_highlight', 0.10)]
+CAMERA_FOR = {'new_scene': ['hold', 'lateral_pan'], 'shot_size_change': ['slow_push', 'detail_push'],
+              'line_reveal': ['hold'], 'map_change': ['lateral_pan'], 'document_highlight': ['detail_push']}
+# (ambience tokens per environment live in unseenpast.ENV_SFX, shared with sfx.py)
+ACTION_WORDS = re.compile(r'\b(strike|tool|hammer|machine|engine|collapse|fall|shout|alarm|door|footstep)s?\b', re.I)
+
+
+def words_of(text: str) -> list:
+    return re.findall(r"[\w'’-]+", text)
+
+
+def pick_visual_type(bag: list) -> str:
+    """Pop from the pre-built weighted bag; refill when empty (keeps the target distribution)."""
+    if not bag:
+        bag.extend([t for t, _ in VISUAL_DIST])
+    return bag.pop()
+
+
+def build_bag(total: int, rng: random.Random) -> list:
+    """Exactly `total` visual types at the target distribution, shuffled deterministically.
+    The first shot of each act is forced to new_scene without consuming the bag, so the
+    realised new_scene share runs a few points above the 30% target."""
+    bag = []
+    for t, share in VISUAL_DIST:
+        bag += [t] * max(1, round(share * total))
+    while len(bag) > total:
+        bag.pop()
+    while len(bag) < total:
+        bag.append('new_scene')
+    rng.shuffle(bag)
+    return bag
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser(description='Build shots.json on the documentary 2-3 s grid.')
+    ap.add_argument('slug')
+    ap.add_argument('--target-dur', type=float, default=3.2, help='mean shot length in s (2-3 s spec grid; '
+                    '300 s / 80-100 shots forces ~3.0-3.7 s, so this is clamped to keep <=4.0 s)')
+    a = ap.parse_args()
+
+    script = load_json(ep_file(a.slug, 'script.json'))
+    if not script:
+        raise SystemExit(f'No script.json for {a.slug} — write it with the stage-2 prompt first.')
+    research = load_json(ep_file(a.slug, 'research.json'), {})
+    words = load_json(ep_file(a.slug, 'words.json'), [])
+    acts = script['acts']
+    if len(acts) != 5:
+        raise SystemExit(f'script.json has {len(acts)} acts, the five-act structure requires exactly 5.')
+
+    # ---- act boundaries in seconds ------------------------------------------------------
+    # With words.json: walk the narration word counts and take each act's last word end.
+    # The final act ends at script end (nominal 300 s). Without words.json: nominal times.
+    boundaries = []
+    wi = 0
+    for k, act in enumerate(acts):
+        n = len(words_of(act['narration']))
+        if words and wi + n <= len(words):
+            end = words[min(wi + n, len(words)) - 1]['end_s']
         else:
-            i = find_word(words, base, wi_prev)
-        wi_prev = i + 1
-        a = max(0, round(words[i]['s'] * FPS) - LEAD + int(off or 0))
-    if k == 0:
-        a = 0
-    if a <= prev and k > 0:
-        raise SystemExit(f'Edit entry {k} ({e["shot"]} at {at}) starts at frame {a}, not after the previous cut ({prev})')
-    starts.append(a)
-    prev = a
-end = resolve(ep['end'], words, FPS) if 'end' in ep else round((words[-1]['e'] + ep.get('tail', 0.9)) * FPS)
-if end <= starts[-1]:
-    raise SystemExit(f'The last shot starts at {starts[-1]} but the episode ends at {end}')
+            end = act.get('end_s', 0.0)
+            if words:
+                print(f'note: words.json shorter than act {k + 1}\'s narration; using nominal end_s')
+        boundaries.append(round(min(end, 300.0), 3))
+        wi += n
+    boundaries[-1] = acts[-1].get('end_s', 300.0)
+    starts = [0.0] + boundaries[:-1]
+    for k in range(4):
+        if boundaries[k] < starts[k] or boundaries[k] > starts[k + 1]:
+            print(f'! act {k + 1} boundary ({boundaries[k]} s) is not between {starts[k]} and {starts[k + 1]} s '
+                  '— check the narration against words.json')
+            sys.exit(1)
 
-# ---------------------------------------------------------------- segments and shot clocks
-segments, last_clock = [], {}
-for k, e in enumerate(ep['edit']):
-    a, b = starts[k], starts[k + 1] if k + 1 < len(starts) else end
-    if e.get('reverse'):
-        t0 = e.get('from', last_clock.get(e['shot'], b - a))
-        t1 = e.get('to', 0)
+    # ---- shot grid ----------------------------------------------------------------------
+    total_dur = boundaries[-1]
+    target = min(3.7, max(2.0, a.target_dur))
+    counts = [max(2, round((boundaries[k] - starts[k]) / target)) for k in range(5)]
+    total = sum(counts)
+    while total > 100:
+        k = counts.index(max(counts))
+        counts[k] -= 1
+        total -= 1
+    while total < 80:
+        k = counts.index(min(counts))
+        counts[k] += 1
+        total += 1
+    rng = random.Random(a.slug)  # deterministic per episode
+    bag = build_bag(total, rng)
+
+    shots = []
+    for k, act in enumerate(acts):
+        a0, a1 = starts[k], boundaries[k]
+        env = act.get('environment', 'street')
+        chars = act.get('characters', [])
+        src_ids = [c['source_id'] for c in act.get('citations', []) if c.get('source_id')]
+        n = counts[k]
+        # equal slices, then nudge the last one so the act sums exactly
+        durs = [(a1 - a0) / n] * n
+        durs[-1] = round(a1 - a0 - sum(durs[:-1]), 3)
+        if durs[-1] <= 0:
+            durs[-1] = 0.5
+            durs[0] = round(a1 - a0 - sum(durs[1:]), 3)
+        for j in range(n):
+            s0, s1 = a0 + sum(durs[:j]), a0 + sum(durs[:j + 1])
+            vt = 'new_scene' if j == 0 else pick_visual_type(bag)
+            covered = [w['word'] for w in words if s0 <= w['start_s'] < s1] if words else \
+                words_of(act['narration'])[:10]
+            snippet = ' '.join(covered[:12]) + ('…' if len(covered) > 12 else '')
+            sfx = list(ENV_SFX.get(env, ENV_SFX['street']))
+            if ACTION_WORDS.search(snippet or ''):
+                sfx.append('action_hit')
+            shots.append({
+                'shot_id': f'S{len(shots) + 1:03d}',
+                'start_s': round(s0, 3), 'end_s': round(s1, 3), 'duration_s': round(s1 - s0, 3),
+                'act': k + 1, 'visual_type': vt,
+                'description': f'{ACT_NAMES[k]} — {snippet or act["narration"][:60]}',
+                'characters': list(chars), 'environment': env,
+                'camera_move': CAMERA_FOR[vt][rng.randrange(len(CAMERA_FOR[vt]))],
+                'sfx': sfx,
+                'source_id': src_ids[0] if src_ids and vt in ('map_change', 'document_highlight') else '',
+            })
+
+    data = {'episode_id': script.get('episode_id', a.slug), 'total_shots': len(shots), 'shots': shots}
+    save_json(ep_file(a.slug, 'shots.json'), data)
+
+    # ---- report + validate --------------------------------------------------------------
+    lens = [s['duration_s'] for s in shots]
+    dist = {t: sum(1 for s in shots if s['visual_type'] == t) for t, _ in VISUAL_DIST}
+    print(f'{len(shots)} shots over {total_dur:.1f} s; mean {statistics.mean(lens):.2f} s, '
+          f'median {statistics.median(lens):.2f} s, max {max(lens):.2f} s')
+    print('visual_type distribution: ' + ', '.join(f'{t} {c} ({c / len(shots) * 100:.0f}%)' for t, c in dist.items()))
+    for k in range(5):
+        lo, hi = [(6, 8), (10, 12), (25, 30), (20, 25), (20, 25)][k]
+        n = sum(1 for s in shots if s['act'] == k + 1)
+        flag = '' if lo <= n <= hi else '  ! outside the pacing target'
+        print(f'  act {k + 1} ({ACT_NAMES[k]}): {n} shots ({starts[k]:.1f}-{boundaries[k]:.1f} s){flag}')
+    problems = []
+    if not 80 <= len(shots) <= 100:
+        problems.append(f'{len(shots)} shots outside 80-100')
+    if max(lens) > 4.0:
+        problems.append('a shot exceeds 4.0 s')
+    if abs(total_dur - 300.0) > 0.5:
+        problems.append(f'total {total_dur:.2f} s is not 300 +/- 0.5')
+    for p in problems:
+        print(f'! {p}')
+    if run_validator('shots', ep_file(a.slug, 'shots.json')) and not problems:
+        print('shots.json passed the validator.')
+        print(f"next: node scripts/stills.mjs {a.slug}")
     else:
-        t0 = e.get('from', 0)
-        t1 = t0 + (b - a)
-    last_clock[e['shot']] = t1
-    line = ' '.join(w['w'] + w.get('p', '').strip() for w in words if a <= round(w['s'] * FPS) + LEAD < b)
-    seg = {'shot': e['shot'], 'a': a, 'b': b, 't0': t0, 't1': t1, 'line': line}
-    if e.get('look'):
-        seg['look'] = e['look']
-    segments.append(seg)
+        sys.exit(1)
+    rows = ['| # | Shot | Act | In | Dur | Type | Camera | Environment | SFX | Description |',
+            '|---|---|---|---|---|---|---|---|---|---|']
+    for i, s in enumerate(shots):
+        rows.append(f"| {i + 1} | {s['shot_id']} | {s['act']} | {s['start_s']:.1f} s | {s['duration_s']:.2f} s | "
+                    f"{s['visual_type']} | {s['camera_move']} | {s['environment']} | {', '.join(s['sfx'])} | "
+                    f"{s['description'][:80]} |")
+    md = (f"# {script.get('title', a.slug)}: shot list\n\n{len(shots)} shots, {total_dur:.1f} s, "
+          f"mean {statistics.mean(lens):.2f} s\n\n" + '\n'.join(rows) + '\n')
+    (out_dir(a.slug) / 'shotlist.md').write_text(md, encoding='utf-8')
+    print(f'review copy: {out_dir(a.slug) / "shotlist.md"}')
 
-ids = list(dict.fromkeys(s['shot'] for s in segments))
-for sid in shots:
-    if sid not in ids:
-        print(f'note: shot {sid} is defined but not in the edit')
-info = []
-for sid in ids:
-    segs = [s for s in segments if s['shot'] == sid]
-    fwd = [s for s in segs if s['t1'] >= s['t0']]
-    length = max([s['t1'] for s in fwd] + [s['t0'] for s in segs])
-    d = shots[sid]
-    first = segs[0]
-    info.append({
-        'id': sid, 'size': d.get('size', ''), 'key': d.get('key', (first['b'] - first['a']) // 2), 'len': length, 'first': first['a'],
-        'line': first['line'], 'note': d.get('note', ''),
-    })
 
-# ---------------------------------------------------------------- fx, audio
-fx = []
-for e in ep.get('fx', []):
-    item = {k: v for k, v in e.items() if k != 'at'}
-    item['f'] = resolve(e['at'], words, FPS, segments, ids)
-    fx.append(item)
-old = load_json(ep_dir(slug) / 'timeline.json', {}) or {}
-audio = {k: v for k, v in old.get('audio', {}).items() if k.endswith('Vol')}
-for k in ['voice', 'sfx', 'music']:
-    f = stem(slug, k)
-    if f:
-        audio[k] = f'{slug}/{f.name}'
-title = ep.get('title', ['', ''])
-tl = {'slug': slug, 'title': ' '.join(title) if isinstance(title, list) else title, 'fps': FPS, 'total': end, 'segments': segments, 'shots': info, 'fx': fx, 'audio': audio}
-save_json(ep_dir(slug) / 'timeline.json', tl)
-
-# ---------------------------------------------------------------- the pace report and the shot list
-cuts = [s['a'] for s in segments[1:]]
-lens = [(s['b'] - s['a']) / FPS for s in segments]
-dur = end / FPS
-first10 = len([c for c in cuts if c < 10 * FPS])
-per_min = len(cuts) / dur * 60
-print(f'{len(segments)} segments, {len(ids)} shots, {dur:.1f} s ({end} frames)')
-print(f'pace: {per_min:.0f} cuts/min overall, {first10 / min(10, dur) * 60:.0f} cuts/min in the first 10 s; median shot {statistics.median(lens):.1f} s, longest {max(lens):.1f} s')
-if per_min < 24:
-    print('  ! slower than the genre opening (about 27 cuts a minute): split long shots or cut on more words')
-for s in segments:
-    if (s['b'] - s['a']) / FPS > 4:
-        print(f'  ! {s["shot"]} holds {(s["b"] - s["a"]) / FPS:.1f} s: give it action inside (a move, a light change, a push in) or split it')
-rows = ['| # | Shot | Size | In | Length | Clock | Look | Words |', '|---|---|---|---|---|---|---|---|']
-for k, s in enumerate(segments):
-    d = shots[s['shot']]
-    clock = f"{s['t0']:.0f}→{s['t1']:.0f}" + (' (back)' if s['t1'] < s['t0'] else '')
-    rows.append(f"| {k + 1} | {s['shot']} | {d.get('size', '')} | {s['a'] / FPS:.2f} s | {(s['b'] - s['a']) / FPS:.2f} s | {clock} | {s.get('look', '')} | {s['line']} |")
-md = f"# {tl['title']}: shot list\n\n{dur:.1f} s, {len(segments)} segments, {per_min:.0f} cuts/min\n\n" + '\n'.join(rows) + '\n'
-(out_dir(slug) / 'shotlist.md').write_text(md, encoding='utf-8')
-print(md)
+if __name__ == '__main__':
+    main()

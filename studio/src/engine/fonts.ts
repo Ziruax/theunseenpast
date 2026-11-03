@@ -1,21 +1,16 @@
-import { loadFont } from '@remotion/fonts';
-import { staticFile } from 'remotion';
-import { loadFont as loadBricolage } from '@remotion/google-fonts/BricolageGrotesque';
-import { loadFont as loadMono } from '@remotion/google-fonts/FragmentMono';
-import { loadFont as loadHand } from '@remotion/google-fonts/Kalam';
+import { loadFont as loadCinzel } from '@remotion/google-fonts/Cinzel';
+import { loadFont as loadInter } from '@remotion/google-fonts/Inter';
 import { STUDIO } from '../studio.config';
 
-// Three faces: a heavy display face for the title card, a mono for on-screen readouts (timers, labels, chips),
-// and a handwriting face for chalk and notes. The Google faces load at render time (they need a connection);
-// a local title face from studio.config.ts loads from public/ and works offline.
+// The two faces of The Unseen Past, loaded at render time from Google Fonts (a connection is needed):
+// Cinzel 600/700 carries the act titles and every display line; Inter 400/600/700 carries labels,
+// captions and anything else that reads. The documentary never uses another face.
 
-loadBricolage('normal', { weights: ['600', '700', '800'], subsets: ['latin'] });
-loadMono('normal', { weights: ['400'], subsets: ['latin'] });
-loadHand('normal', { weights: ['400', '700'], subsets: ['latin'] });
-if (STUDIO.titleFont) loadFont({ family: STUDIO.titleFont.family, url: staticFile(STUDIO.titleFont.file), weight: STUDIO.titleFont.weight });
+loadCinzel('normal', { weights: ['600', '700'], subsets: ['latin'] });
+loadInter('normal', { weights: ['400', '600', '700'], subsets: ['latin'] });
 
 export const FONT = {
-  title: STUDIO.titleFont ? STUDIO.titleFont.family : 'Bricolage Grotesque',
-  ui: 'Fragment Mono',
-  hand: 'Kalam',
+  title: STUDIO.titleFont,
+  label: 'Inter',
+  ui: 'Inter',
 };

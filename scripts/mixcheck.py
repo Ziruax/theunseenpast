@@ -1,45 +1,55 @@
-"""Step 7 check: is the voice clear of the effects and the music? Measures the three stems at their mix volumes in
-0.4 s windows and lists the moments, while someone is speaking, where effects or music come within `margin` dB of the
-voice. Fix a flagged moment by lowering that event's gain in episode.json, then re-run sfx.py.
+"""Loudness check for the documentary mix. Measures any audio or video file (integrated LUFS,
+true peak dBTP, LRA) and validates it against the targets from references/sound.md.
 
-python <skill>/scripts/mixcheck.py <slug> [--margin 3]
+python3 scripts/mixcheck.py <file> [--profile master]
+profiles: master (default: -14 LUFS +/-0.5, true peak <= -1 dBTP)
+          voice  (-16..-18 LUFS)   sfx (-18..-22)   ambience (-28..-32)   music (-24..-28)
+Exit code 1 when the file misses its target, so it can gate a pipeline step.
 """
-import json, sys
+from __future__ import annotations
 
-import numpy as np
+import argparse
+import pathlib
+import sys
 
-from wi import SR, decode, ep_dir, stem
+from unseenpast import ffmpeg_json_loudnorm
 
-slug = sys.argv[1]
-margin = float(sys.argv[sys.argv.index('--margin') + 1]) if '--margin' in sys.argv else 3.0
-tl = json.loads((ep_dir(slug) / 'timeline.json').read_text(encoding='utf-8'))
-A = tl['audio']
-stems = {k: decode(stem(slug, k)) * A.get(f'{k}Vol', 1) for k in ['voice', 'sfx', 'music'] if stem(slug, k)}
-n = min(len(x) for x in stems.values())
-W = int(0.4 * SR)
-
-
-def db(x):
-    return 20 * np.log10(np.sqrt(np.mean(x ** 2)) + 1e-9)
+PROFILES = {
+    'master': {'lufs': (-14.5, -13.5), 'tp_max': -1.0, 'label': 'master: -14 LUFS, -1 dBTP'},
+    'voice': {'lufs': (-18.0, -16.0), 'tp_max': None, 'label': 'voice: -16..-18 LUFS short-term band'},
+    'sfx': {'lufs': (-22.0, -18.0), 'tp_max': None, 'label': 'sfx: -18..-22 LUFS during voice'},
+    'ambience': {'lufs': (-32.0, -28.0), 'tp_max': None, 'label': 'ambience: -28..-32 LUFS'},
+    'music': {'lufs': (-28.0, -24.0), 'tp_max': None, 'label': 'music: -24..-28 LUFS'},
+}
 
 
-segs = tl['segments']
-starts = range(0, n - W, W // 2)
-levels = [db(stems['voice'][i:i + W]) for i in starts]
-speaking = float(np.percentile([v for v in levels if v > -60], 70)) - 8  # windows this loud are words, not pauses
-flags = []
-for i, v in zip(starts, levels):
-    if v < speaking:
-        continue
-    for k in ['sfx', 'music']:
-        if k in stems:
-            o = db(stems[k][i:i + W])
-            if o > v - margin:
-                fr = int(i / SR * tl['fps'])
-                shot = next((s['shot'] for s in segs if s['a'] <= fr < s['b']), '?')
-                flags.append((round(i / SR, 1), shot, k, round(o - v, 1)))
-mix = sum(x[:n] for x in stems.values())
-print(f'{len(flags)} moments where the effects or music come within {margin:g} dB of the voice (time s, shot, stem, dB over the voice):')
-for f in flags:
-    print('  ', f)
-print('mix peak before mastering:', round(float(np.abs(mix).max()), 3))
+def main() -> None:
+    ap = argparse.ArgumentParser(description='Measure and validate loudness against the documentary targets.')
+    ap.add_argument('file', help='any audio or video file (e.g. out/<slug>/final.mp4)')
+    ap.add_argument('--profile', choices=sorted(PROFILES), default='master')
+    a = ap.parse_args()
+
+    p = pathlib.Path(a.file)
+    if not p.exists():
+        raise SystemExit(f'No such file: {p}')
+    m = ffmpeg_json_loudnorm(['-i', str(p), '-af', 'loudnorm=I=-14:TP=-1:LRA=11:print_format=json'])
+    lufs = float(m['input_i'])
+    true_peak = float(m['input_tp'])
+    lra = float(m['input_lra'])
+    print(f'{p.name}: {lufs:.1f} LUFS integrated, true peak {true_peak:.1f} dBTP, LRA {lra:.1f} LU')
+
+    spec = PROFILES[a.profile]
+    problems = []
+    lo, hi = spec['lufs']
+    if not (lo <= lufs <= hi):
+        problems.append(f'loudness {lufs:.1f} outside {lo}..{hi}')
+    if spec['tp_max'] is not None and true_peak > spec['tp_max']:
+        problems.append(f'true peak {true_peak:.1f} above {spec["tp_max"]}')
+    for q in problems:
+        print(f'! {q}')
+    print(('OK — ' if not problems else 'FAIL — ') + spec['label'])
+    sys.exit(1 if problems else 0)
+
+
+if __name__ == '__main__':
+    main()

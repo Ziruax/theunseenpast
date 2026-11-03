@@ -1,0 +1,167 @@
+{
+  "episode_id": "pilot-chimneys",
+  "core_claim": "Between 1788 and 1875 British law repeatedly restricted the use of child 'climbing boys' in chimney sweeping, yet the practice survived because no Act before the Chimney Sweepers Act 1875 created an effective enforcement mechanism, and it was George Brewster's death in Cambridge in February 1875 that finally forced one.",
+  "period": {
+    "start_year": 1775,
+    "end_year": 1880
+  },
+  "location": {
+    "city": "London and Cambridge",
+    "region": "England",
+    "country": "United Kingdom"
+  },
+  "key_dates": [
+    {
+      "date": "1775",
+      "event": "Percivall Pott identifies soot as the cause of scrotal cancer in chimney sweeps — the first occupational cancer linked to a specific exposure.",
+      "source_id": "S5"
+    },
+    {
+      "date": "1788",
+      "event": "Chimney Sweepers Act 1788 sets a minimum age of eight for boys apprenticed to chimney sweeps.",
+      "source_id": "S4"
+    },
+    {
+      "date": "1817",
+      "event": "Parliamentary Select Committee takes evidence on the employment of boys as chimney sweepers.",
+      "source_id": "S2"
+    },
+    {
+      "date": "1840",
+      "event": "Chimney Sweepers and Chimneys Regulation Act 1840 makes it unlawful for any person under twenty-one to ascend or descend a chimney.",
+      "source_id": "S3"
+    },
+    {
+      "date": "February 1875",
+      "event": "Death of George Brewster, a twelve-year-old climbing boy, stuck in a chimney flue in Cambridge.",
+      "source_id": "S4"
+    },
+    {
+      "date": "August 1875",
+      "event": "Chimney Sweepers Act 1875: all sweeps must register with the police, who are made responsible for enforcing the sweep Acts.",
+      "source_id": "S1"
+    }
+  ],
+  "named_figures": [
+    {
+      "name": "George Brewster",
+      "role": "Twelve-year-old climbing boy whose death in February 1875 preceded the Chimney Sweepers Act 1875",
+      "source_id": "S4"
+    },
+    {
+      "name": "Anthony Ashley-Cooper, 7th Earl of Shaftesbury",
+      "role": "Parliamentary reformer who campaigned against the use of climbing boys and promoted the 1875 Act",
+      "source_id": "S4"
+    },
+    {
+      "name": "Percivall Pott",
+      "role": "Surgeon who in 1775 identified soot as the cause of chimney sweeps' scrotal cancer",
+      "source_id": "S5"
+    }
+  ],
+  "primary_sources": [
+    {
+      "source_id": "S1",
+      "title": "Chimney Sweepers Act 1875 (38 & 39 Vict. c. 70)",
+      "institution": "legislation.gov.uk (The National Archives)",
+      "url": "https://www.legislation.gov.uk/ukpga/Vict/38-39/70",
+      "priority": 1,
+      "quote_or_excerpt": "Excerpt (paraphrase, not verbatim): every chimney sweep is required to be registered with the police; employing an unregistered sweep is an offence; and police officers are charged with enforcing the Chimney Sweepers Acts."
+    },
+    {
+      "source_id": "S2",
+      "title": "Report of the Select Committee on the Employment of Boys as Chimney Sweepers (1817), Parliamentary Paper",
+      "institution": "UK Parliament",
+      "url": "https://www.parliament.uk/about/living-heritage/transformingsociety/livinglearning/19thcentury/overview/earlychildlabour/",
+      "priority": 1,
+      "quote_or_excerpt": "Excerpt (paraphrase of witness evidence, not verbatim): witnesses described climbing boys being driven up flues against their will, including accounts of masters using pins and lighted straw to force reluctant children to climb."
+    },
+    {
+      "source_id": "S3",
+      "title": "Chimney Sweepers and Chimneys Regulation Act 1840 (3 & 4 Vict.)",
+      "institution": "legislation.gov.uk (The National Archives)",
+      "url": "https://www.legislation.gov.uk/ukpga/Vict/3-4/85",
+      "priority": 1,
+      "quote_or_excerpt": "Excerpt (paraphrase, not verbatim): no person under the age of twenty-one shall be compelled or knowingly allowed to ascend or descend any chimney or flue."
+    },
+    {
+      "source_id": "S4",
+      "title": "UK Parliament Living Heritage — early child labour / chimney sweeps pages (incl. George Brewster case and 1875 Act)",
+      "institution": "UK Parliament",
+      "url": "https://www.parliament.uk/about/living-heritage/transformingsociety/livinglearning/19thcentury/overview/earlychildlabour/",
+      "priority": 2
+    }
+  ],
+  "secondary_sources": [
+    {
+      "source_id": "S5",
+      "title": "Encyclopaedia Britannica — 'Percivall Pott'",
+      "url": "https://www.britannica.com/biography/Percivall-Pott",
+      "priority": 3
+    },
+    {
+      "source_id": "S6",
+      "title": "Encyclopaedia Britannica — 'Chimney sweep'",
+      "url": "https://www.britannica.com/topic/chimney-sweep",
+      "priority": 4
+    }
+  ],
+  "documented_facts": [
+    {
+      "fact": "The Chimney Sweepers Act 1875 required master sweeps to be registered with the police and made police officers responsible for enforcing the chimney-sweep Acts.",
+      "source_id": "S1"
+    },
+    {
+      "fact": "George Brewster, a twelve-year-old climbing boy, died in February 1875 after becoming stuck in a chimney flue in Cambridge; public outcry over his death was followed within months by the Chimney Sweepers Act 1875.",
+      "source_id": "S4"
+    },
+    {
+      "fact": "The Chimney Sweepers and Chimneys Regulation Act 1840 made it unlawful for any person under twenty-one to ascend or descend a chimney.",
+      "source_id": "S3"
+    },
+    {
+      "fact": "The Chimney Sweepers Act 1788 set a minimum age of eight for boys apprenticed as chimney sweeps.",
+      "source_id": "S4"
+    },
+    {
+      "fact": "In 1775 the surgeon Percivall Pott identified soot as the cause of scrotal cancer in chimney sweeps — the first occupational cancer linked to a specific exposure.",
+      "source_id": "S5"
+    },
+    {
+      "fact": "A Parliamentary Select Committee took evidence on the employment of boys as chimney sweepers in 1817, including testimony that boys were driven up flues against their will.",
+      "source_id": "S2"
+    },
+    {
+      "fact": "Lord Shaftesbury campaigned in Parliament against the use of climbing boys for decades before the 1875 Act and promoted the Bill that became the Chimney Sweepers Act 1875.",
+      "source_id": "S4"
+    },
+    {
+      "fact": "Flexible rod-and-brush sweeping equipment was available from the early nineteenth century, but many master sweeps continued to employ climbing boys.",
+      "source_id": "S6"
+    },
+    {
+      "fact": "Climbing boys were apprenticed young and were frequently recruited from workhouses or pauper families.",
+      "source_id": "S4"
+    },
+    {
+      "fact": "Occasional illegal employment of climbing boys was still being reported after the 1875 Act, into the 1880s.",
+      "source_id": "S4"
+    }
+  ],
+  "reconstructed_elements": [
+    "'Thomas' — composite climbing boy character; a visual synthesis of documented testimonies, not a real individual",
+    "Climbing boy's working routine (apprenticeship, climb, scrape, soot collection) reconstructed as a sequence from documented descriptions",
+    "Victorian townhouse cross-section with interior flue layout — diagrammatic reconstruction, not a specific building",
+    "Master sweep's workshop interior — representative contents, no specific documented premises",
+    "Cambridge hotel and rooftop setting for the 1875 sequence — simplified composite of period architecture",
+    "Workhouse handover scene — representative of documented apprenticeship practices, not a documented event"
+  ],
+  "composite_characters": [
+    {
+      "label": "Thomas",
+      "based_on": "composite of documented climbing boys' testimonies given to Parliamentary Select Committees (1817 onward)",
+      "disclosure": "Reconstructed composite character — not a documented individual; all scenes featuring Thomas are illustration, not evidence."
+    }
+  ],
+  "asset_licenses": []
+}

@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shot List",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["episode_id", "total_shots", "shots"],
+  "properties": {
+    "episode_id": { "type": "string" },
+    "total_shots": { "type": "integer", "minimum": 80, "maximum": 120 },
+    "shots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["shot_id", "start_s", "end_s", "duration_s", "act", "visual_type", "description"],
+        "properties": {
+          "shot_id": { "type": "string" },
+          "start_s": { "type": "number" },
+          "end_s": { "type": "number" },
+          "duration_s": { "type": "number", "maximum": 4.0 },
+          "act": { "type": "integer", "minimum": 1, "maximum": 5 },
+          "visual_type": {
+            "type": "string",
+            "enum": ["new_scene", "shot_size_change", "line_reveal", "map_change", "document_highlight"]
+          },
+          "description": { "type": "string" },
+          "characters": { "type": "array", "items": { "type": "string" } },
+          "environment": { "type": "string" },
+          "camera_move": {
+            "type": "string",
+            "enum": ["hold", "slow_push", "lateral_pan", "detail_push"]
+          },
+          "sfx": { "type": "array", "items": { "type": "string" } },
+          "source_id": { "type": "string" },
+          "still_path": {
+            "type": "string",
+            "description": "Optional. Path to the rendered storyboard still for this shot (filled in at Stage 4)."
+          },
+          "word_span": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Optional. Inclusive index range of narration words spoken during this shot, for voice-to-shot sync.",
+            "required": ["first_word_index", "last_word_index"],
+            "properties": {
+              "first_word_index": { "type": "integer", "minimum": 0 },
+              "last_word_index": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

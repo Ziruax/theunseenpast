@@ -1,160 +1,189 @@
-"""Step 7: sound. Generates the episode's sound effects and music bed with ElevenLabs, lines each hit up on its frame,
-mixes the effects and music stems, and sets their levels against the voice.
+"""Stage: documentary sound. Builds the ambience beds and the sparse action SFX stem that
+master.py mixes, at the documentary levels from references/sound.md.
 
-python <skill>/scripts/sfx.py <slug> [--dry]
-Reads  src/episodes/<slug>/episode.json "sound", timeline.json and words.json
-Writes public/<slug>/sfx.wav and music.wav, sets their volumes in timeline.json, prints the credits it used.
---dry lists the clips it would generate (and what is already in the library) without calling the API.
+python3 scripts/sfx.py <slug> [--dry]
+Reads  src/episodes/<slug>/shots.json (environments, timing, per-shot sfx suggestions)
+Writes out/<slug>/ambience.wav        (environment beds, normalised to -30 LUFS, spec -28..-32)
+       out/<slug>/sfx.wav             (sparse action hits, normalised to -20 LUFS, spec -18..-22)
+       out/<slug>/sfx_manifest.json   (every bed and hit: time, source, level — master.py reads it)
+--dry lists what would be built and where each clip comes from, without writing audio.
 
-"sound": {
-  "clips":   {"name": ["prompt", seconds], ...}       generated once, cached in library/sfx/ by name + prompt + length
-  "events":  [[cue, clip, gain, align, until], ...]   align "onset" (default: the attack lands on the cue) or "peak"
-                                                        (the loudest moment does, for whooshes and booms); until = a cue
-                                                        where the clip is cut with a short fade
-  "repeats": [{"at": cue, "clip": name, "n": 15, "every": 2, "gain": [lo, hi], "pitch": [lo, hi]}]
-                                                        one clip many times, each pitched a little differently
-  "music":   {"clip": name, "until": cue, "reverse_looks": ["rewind"], "from": cue}
-                                                        the bed starts at "from" (default 0), cut at "until"; during a look
-                                                        listed in reverse_looks it plays what just played, backwards
-  "levels":  {"sfx_lu": 1.5, "music_lu": -9.5}         integrated loudness of each stem against the voice's
-}
-Cues are the same as in plan.py: "S3+2", "f:46", "s:1.5", "paste+3".
+Documentary model (not the retired per-action cartoon SFX):
+- Ambience bed per environment run (mine / factory / street / hospital / home), quiet under
+  the voice. A bed uses a library clip when one fits (studio/library/sfx), otherwise it is
+  SYNTHESISED with ffmpeg (filtered noise + slow tremolo) — an honest approximation, noted in
+  the manifest and in the console output.
+- Action SFX stays sparse: only shots whose description suggests a physical action get a hit,
+  and hits are quieter than the short-form default. Unused library clips are not added.
+- Music is NOT generated here: the spec wants sparse, curated music (act transitions, legacy
+  section). Put a music.wav in out/<slug>/ and master.py will mix it at -26 LUFS.
 """
-import sys, time
+from __future__ import annotations
+
+import argparse
+import re
+import subprocess
 
 import numpy as np
 
-from wi import SR, api, clip_path, credits_used, spent_since, decode, ep_dir, load_episode, load_json, log_cost, loudness, pub_dir, resolve, save_json, stem, write_wav
+from unseenpast import AMBIENCE_TOKENS, LIB, SR, decode, ep_file, gain_to, load_json, loudness, out_dir, save_json, write_wav
 
-slug = sys.argv[1]
-dry = '--dry' in sys.argv
-ep = load_episode(slug)
-S = ep.get('sound')
-if not S:
-    raise SystemExit('episode.json has no "sound" section')
-tl = load_json(ep_dir(slug) / 'timeline.json')
-if not tl:
-    raise SystemExit('No timeline.json: run plan.py first')
-words = load_json(ep_dir(slug) / 'words.json', [])
-FPS = tl['fps']
-ids = [s['id'] for s in tl['shots']]
-cue = lambda c: resolve(c, words, FPS, tl['segments'], ids)
-DUR = tl['total'] / FPS + 0.4
+BED_TARGET_LUFS = -30.0   # spec: ambience -28..-32 under voice
+SFX_TARGET_LUFS = -20.0   # spec: action SFX -18..-22 during voice
+FADE_S = 0.5              # bed crossfade at environment changes
 
-# ---------------------------------------------------------------- the clips
-need = {}
-for name, (prompt, secs) in S['clips'].items():
-    need[name] = (prompt, secs, clip_path(name, prompt, secs))
-missing = [n for n, (_, _, p) in need.items() if not p.exists()]
-print(f'{len(need)} clips, {len(need) - len(missing)} already in the library, {len(missing)} to generate: {", ".join(missing) or "none"}')
-if dry:
-    sys.exit(0)
-if missing:
-    before, _ = credits_used()
-    t0 = time.time()
-    for n in missing:
-        prompt, secs, p = need[n]
-        p.write_bytes(api('/v1/sound-generation?output_format=mp3_44100_128', {'text': prompt, 'duration_seconds': secs, 'prompt_influence': 0.45}))
-        print('  generated', n)
-    used, items = spent_since(t0, expect=len(missing))
-    after, _ = credits_used()
-    used = max(used, after - before)
-    note = f'{len(missing)} clips, {sum(need[n][1] for n in missing):.1f} s'
-    if items < len(missing) and after == before:
-        note += '; not all in the history or the counter yet, check the usage page'
-    log_cost(slug, 'sound', used, note)
+# Library clip name prefixes per environment / action, tried in order (studio/library/sfx).
+BED_LIB = {'mine': ['room_tone', 'power_hum'], 'factory': ['power_hum', 'class_murmur'],
+           'street': ['roof_wind', 'class_murmur'], 'hospital': ['room_tone'],
+           'home': ['room_tone', 'roof_wind']}
+ACTION_LIB = {'action_hit': ['clink', 'crack'], 'footsteps': ['step', 'big_step'], 'door': ['crack']}
 
-clips = {}
-for n, (_, _, p) in need.items():
-    x = decode(p)
-    clips[n] = x / max(1e-9, np.abs(x).max())  # every clip at the same peak, so the gains mean something
+# Synthetic beds (used when the library has nothing suitable): mono, generated per run length.
+# Each is filtered noise shaped toward the environment; documented as a reconstruction.
+BED_SYNTH = {
+    'mine': 'anoisesrc=color=brown:amplitude=0.7:seed=11:sample_rate={sr},lowpass=f=160,tremolo=f=0.3:d=0.6',
+    'factory': 'anoisesrc=color=pink:amplitude=0.6:seed=22:sample_rate={sr},bandpass=f=250:w=180,tremolo=f=1.2:d=0.7',
+    'street': 'anoisesrc=color=pink:amplitude=0.5:seed=33:sample_rate={sr},lowpass=f=450,tremolo=f=0.2:d=0.4',
+    'hospital': 'anoisesrc=color=white:amplitude=0.2:seed=44:sample_rate={sr},lowpass=f=250,highpass=f=60',
+    'home': 'anoisesrc=color=brown:amplitude=0.5:seed=55:sample_rate={sr},lowpass=f=140,tremolo=f=0.15:d=0.3',
+}
+ACTION_SYNTH = {
+    'action_hit': ('anoisesrc=color=white:amplitude=0.9:seed=66:sample_rate={sr},lowpass=f=900,'
+                   'afade=t=in:d=0.005,afade=t=out:st=0.1:d=0.15', 0.3),
+}
+
+ACTION_HINT = re.compile(r'\b(strike|tool|hammer|machine|engine|collapse|fall|shout|alarm|door|footstep)s?\b', re.I)
 
 
-def onset(x, mode):
-    a = np.abs(x)
-    win = int(0.01 * SR)
-    sm = np.convolve(a, np.ones(win) / win, mode='same')
-    return int(np.argmax(sm)) if mode == 'peak' else int(np.argmax(sm > 0.2 * sm.max()))
+def lib_find(prefixes: list) -> object:
+    """First library file whose name starts with one of the prefixes, else None."""
+    for p in prefixes:
+        for f in sorted(LIB.glob(f'{p}-*.mp3')) or sorted(LIB.glob(f'{p}.*')):
+            return f
+    return None
 
 
-def put(buf, frame, x, gain, align='onset', cut=None):
-    i = int(frame / FPS * SR) - onset(x, align)
-    if i < 0:
-        x, i = x[-i:], 0
-    if cut is not None:
-        n = max(0, int(cut / FPS * SR) - i)
-        x = x[:n].copy()
-        f = min(len(x), int(0.08 * SR))
-        if f:
-            x[-f:] *= np.linspace(1, 0, f)
-    j = min(len(buf), i + len(x))
+def synth(filter_graph: str, seconds: float) -> np.ndarray:
+    """Render a synthetic clip to mono float64 at 44.1 kHz with ffmpeg's lavfi."""
+    r = subprocess.run(['ffmpeg', '-v', 'error', '-f', 'lavfi', '-i', filter_graph, '-t', f'{seconds:.3f}',
+                        '-f', 'f64le', '-ac', '1', '-ar', str(SR), '-'], capture_output=True, check=True)
+    return np.frombuffer(r.stdout, dtype=np.float64).copy()
+
+
+def bed_for(env: str, seconds: float, notes: list) -> tuple:
+    """A bed of `seconds` for an environment: (samples, source description)."""
+    src = lib_find(BED_LIB.get(env, []))
+    if src:
+        clip = decode(src)
+        reps = int(np.ceil(seconds / max(1.0, len(clip) / SR)))
+        tiled = np.tile(clip, reps)[:int(seconds * SR)]
+        return tiled, f'library:{src.name}'
+    graph = BED_SYNTH.get(env, BED_SYNTH['street']).format(sr=SR)
+    notes.append(f'{env} bed synthesised with ffmpeg ({graph.split(",")[0]}) — no library clip fits')
+    return synth(graph, seconds), 'synthesised:ffmpeg-lavfi'
+
+
+def put(buf: np.ndarray, at_s: float, clip: np.ndarray, gain: float) -> None:
+    i = int(at_s * SR)
+    j = min(len(buf), i + len(clip))
     if j > i:
-        buf[i:j] += x[: j - i] * gain
+        buf[i:j] += clip[:j - i] * gain
 
 
-# ---------------------------------------------------------------- effects
-sfx = np.zeros(int(DUR * SR))
-for ev in S.get('events', []):
-    c, name, gain = ev[0], ev[1], ev[2]
-    align = ev[3] if len(ev) > 3 else 'onset'
-    until = cue(ev[4]) if len(ev) > 4 and ev[4] else None
-    put(sfx, cue(c), clips[name], gain, align, until)
-for r in S.get('repeats', []):
-    base = clips[r['clip']]
-    g0, g1 = r.get('gain', [0.3, 0.3])
-    p0, p1 = r.get('pitch', [1, 1])
-    start = cue(r['at'])
-    for i in range(r['n']):
-        k = p0 + (p1 - p0) * ((i * 37) % 11) / 10
-        shifted = np.interp(np.arange(0, len(base), k), np.arange(len(base)), base)
-        put(sfx, start + r.get('every', 2) * i, shifted, g0 + (g1 - g0) * ((i * 53) % 7) / 6)
+def fade_edges(x: np.ndarray, s: float = FADE_S) -> np.ndarray:
+    n = min(len(x), int(s * SR))
+    if n:
+        x = x.copy()
+        x[:n] *= np.linspace(0, 1, n)
+        x[-n:] *= np.linspace(1, 0, n)
+    return x
 
-# ---------------------------------------------------------------- music
-music = np.zeros(int(DUR * SR))
-M = S.get('music')
-if M:
-    m = clips[M['clip']]
-    m0 = int(cue(M['from']) / FPS * SR) if M.get('from') else 0
-    n = min(len(music) - m0, len(m))
-    music[m0:m0 + n] = m[:n]
-    for seg_look in M.get('reverse_looks', []):
-        runs = []
-        for s in tl['segments']:
-            if s.get('look') == seg_look:
-                if runs and runs[-1][1] == s['a']:
-                    runs[-1][1] = s['b']
-                else:
-                    runs.append([s['a'], s['b']])
-        for a, b in runs:
-            i, j = int(a / FPS * SR), int(b / FPS * SR)
-            seg = music[max(0, i - 2 * (j - i)): i][::-2][: j - i]  # what just played, backwards at double speed
-            music[i: i + len(seg)] = seg * 0.55
-    if M.get('until'):
-        end = int(cue(M['until']) / FPS * SR)
-        f = int(0.03 * SR)
-        music[max(0, end - f): end] *= np.linspace(1, 0, min(f, end))
-        music[end:] = 0
 
-# ---------------------------------------------------------------- stems and levels against the voice
-pub = pub_dir(slug)
-write_wav(pub / 'sfx.wav', sfx, 0.98)
-if M:
-    write_wav(pub / 'music.wav', music, 0.98)
-L = {'sfx_lu': 1.5, 'music_lu': -9.5}
-L.update(S.get('levels', {}))
-v_lufs, _ = loudness(stem(slug, 'voice'))
-s_lufs, _ = loudness(pub / 'sfx.wav')
-m_lufs, _ = loudness(pub / 'music.wav') if M else (float('-inf'), 0)
-gain_db = {'voice': 0.0, 'sfx': v_lufs + L['sfx_lu'] - s_lufs}
-if M:
-    gain_db['music'] = v_lufs + L['music_lu'] - m_lufs
-top = max(gain_db.values())
-vols = {k: round(min(1.0, 0.8 * 10 ** ((g - top) / 20)), 4) for k, g in gain_db.items()}  # the loudest stem at 0.8
-audio = tl.get('audio', {})
-audio.update({'voice': f'{slug}/{stem(slug, "voice").name}', 'sfx': f'{slug}/sfx.wav', 'voiceVol': vols['voice'], 'sfxVol': vols['sfx']})
-if M:
-    audio.update({'music': f'{slug}/music.wav', 'musicVol': vols['music']})
-tl['audio'] = audio
-save_json(ep_dir(slug) / 'timeline.json', tl)
-print(f'voice {v_lufs:.1f} LUFS, effects stem {s_lufs:.1f}, music stem {m_lufs:.1f}')
-print(f'volumes in the mix: {vols} (effects {L["sfx_lu"]:+.1f} LU and music {L["music_lu"]:+.1f} LU against the voice)')
+def main() -> None:
+    ap = argparse.ArgumentParser(description='Documentary ambience beds + sparse action SFX.')
+    ap.add_argument('slug')
+    ap.add_argument('--dry', action='store_true', help='list what would be built; write nothing')
+    a = ap.parse_args()
+
+    shots = load_json(ep_file(a.slug, 'shots.json'))
+    if not shots:
+        raise SystemExit(f'No shots.json for {a.slug} — run plan.py first.')
+    shots = shots['shots']
+    total = max(s['end_s'] for s in shots) + 0.5
+    notes = []
+
+    # ---- ambience beds per environment run ----------------------------------------------
+    runs = []
+    for s in shots:
+        if runs and runs[-1]['env'] == s['environment'] and abs(runs[-1]['end'] - s['start_s']) < 0.05:
+            runs[-1]['end'] = s['end_s']
+        else:
+            runs.append({'env': s['environment'], 'start': s['start_s'], 'end': s['end_s']})
+    amb = np.zeros(int(total * SR))
+    amb_manifest = []
+    for r in runs:
+        x, source = bed_for(r['env'], r['end'] - r['start'] + 2 * FADE_S, notes)
+        put(amb, r['start'], fade_edges(x), 1.0)
+        amb_manifest.append({'environment': r['env'], 'start_s': round(r['start'], 2), 'end_s': round(r['end'], 2),
+                             'source': source, 'target_lufs': BED_TARGET_LUFS})
+    print(f'{len(runs)} ambience runs: ' + ', '.join(f"{r['env']} {r['start']:.0f}-{r['end']:.0f} s" for r in runs))
+
+    # ---- sparse action hits ---------------------------------------------------------------
+    sfx = np.zeros(int(total * SR))
+    sfx_manifest = []
+    for s in shots:
+        # everything that is not a known ambience token is an action hit; ambience is the bed
+        tokens = [t for t in s.get('sfx', []) if t not in AMBIENCE_TOKENS]
+        if not tokens and ACTION_HINT.search(s.get('description', '')):
+            tokens = ['action_hit']
+        for tok in tokens:
+            if tok not in ACTION_LIB and tok not in ACTION_SYNTH:
+                continue  # ambience-style token: already covered by the bed
+            src = lib_find(ACTION_LIB.get(tok, []))
+            if src:
+                clip, source = decode(src), f'library:{src.name}'
+            elif tok in ACTION_SYNTH:
+                graph, secs = ACTION_SYNTH[tok]
+                clip, source = synth(graph.format(sr=SR), secs), 'synthesised:ffmpeg-lavfi'
+                notes.append(f'{tok} synthesised with ffmpeg — no library clip fits')
+            else:
+                notes.append(f'{tok} skipped on shot {s["shot_id"]} — no library clip and no synthesis recipe')
+                continue
+            peak = 0.5 if source.startswith('library') else 0.8
+            clip = clip / max(1e-9, np.abs(clip).max()) * peak
+            at = s['start_s'] + s['duration_s'] * 0.4  # a beat after the cut, not on it
+            put(sfx, at, clip, 1.0)
+            sfx_manifest.append({'shot_id': s['shot_id'], 'token': tok, 'at_s': round(at, 2),
+                                 'source': source, 'target_lufs': SFX_TARGET_LUFS})
+    print(f'{len(sfx_manifest)} action hits (sparse by design)')
+
+    if a.dry:
+        for m in amb_manifest + sfx_manifest:
+            print(' ', m)
+        print('dry run: nothing written')
+        return
+
+    amb_p, sfx_p = out_dir(a.slug) / 'ambience.wav', out_dir(a.slug) / 'sfx.wav'
+    write_wav(amb_p, amb)
+    write_wav(sfx_p, sfx)
+    # ebur128 gating ignores the silence between hits, so the measured level is the level
+    # of the audible material — the right anchor for the "during voice" targets.
+    for path, target in ((amb_p, BED_TARGET_LUFS), (sfx_p, SFX_TARGET_LUFS)):
+        lufs, _ = loudness(path)
+        g = gain_to(target, lufs)
+        write_wav(path, decode(path) * g)
+        l2, _ = loudness(path)
+        print(f'{path.name}: {lufs:.1f} -> {l2:.1f} LUFS (target {target:.0f})')
+
+    manifest = {'episode': a.slug, 'ambience': amb_manifest, 'sfx_events': sfx_manifest,
+                'levels': {'ambience_lufs': BED_TARGET_LUFS, 'sfx_lufs': SFX_TARGET_LUFS},
+                'music': 'none generated — put optional music.wav in out/ and master.py mixes it at -26 LUFS',
+                'notes': sorted(set(notes))}
+    save_json(out_dir(a.slug) / 'sfx_manifest.json', manifest)
+    for n in manifest['notes']:
+        print(f'note: {n}')
+    print(f"next: python3 scripts/master.py {a.slug}")
+
+
+if __name__ == '__main__':
+    main()

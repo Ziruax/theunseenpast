@@ -1,54 +1,90 @@
 import React from 'react';
 import { AbsoluteFill } from 'remotion';
-import { Hero, basePose, Pose, LOOKS, CastName, KitDefs, SetDefs, Study, FONT } from './engine';
+import { PAL, PALETTE, mix, HISTFONT } from './hist/palette';
+import { PlateBorder, ParchmentBase } from './hist/parchment';
+import { Figure, figY } from './hist/figures';
+import { ENVIRONMENTS, Environment } from './hist/environments';
+import { Prop } from './hist/objects';
 
-// The cast sheet: every costume on the one rig, front and three-quarter, over a soft set so contrast is judged in
-// place, plus a row of acting poses. Render it after adding or changing a look:
-//   npx remotion still src/index.ts Cast out/cast.png
+// The StyleSheet (was the CastSheet): the one still that proves the visual system is coherent. Palette
+// swatches with their rules, the eight environment thumbnails, the figure occupations on a baseline and
+// the core props. Render it after touching anything in hist/:
+//   npx remotion still src/index.ts StyleSheet out/stylesheet.png
 
-const Label: React.FC<{ x: number; y: number; text: string }> = ({ x, y, text }) => (
-  <text x={x} y={y} textAnchor="middle" fontFamily={FONT.ui} fontSize={24} fill="#F6EFE3" letterSpacing={2}>
-    {text}
-  </text>
-);
-const P = (o: Partial<Pose>): Pose => ({ ...basePose, ...o });
-const NAMES: Record<CastName, string> = { pip: 'PIP A', pipHood: 'PIP B (HERO)', pipInk: 'PIP C', mo: 'MO, FRIEND', sis: 'SISTER', mom: 'MUM', suit: 'THE SUIT' };
+const FIGS: { occ: Parameters<typeof Figure>[0]['occupation']; pose: Parameters<typeof Figure>[0]['pose']; carry?: Parameters<typeof Figure>[0]['carry'] }[] = [
+  { occ: 'climbing_boy', pose: 'climbing', carry: 'brush' },
+  { occ: 'master_sweep', pose: 'carrying', carry: 'brush' },
+  { occ: 'miner', pose: 'kneeling', carry: 'lamp' },
+  { occ: 'match_worker', pose: 'crouching' },
+  { occ: 'factory_worker', pose: 'standing' },
+  { occ: 'doctor', pose: 'writing' },
+];
 
-export const CastSheet: React.FC = () => {
-  const cast = Object.keys(LOOKS) as CastName[];
-  const row1 = 430;
-  const row2 = 900;
-  const poses: { name: string; p: Partial<Pose> }[] = [
-    { name: 'thinking', p: { armR: { a: 120, b: 110 }, armL: { a: -10, b: -70 }, headTilt: 8, expr: 'worried', yaw: 0.2 } },
-    { name: 'shrug', p: { armL: { a: 40, b: 80 }, armR: { a: 40, b: 80 }, headTilt: -10, expr: 'oops' } },
-    { name: 'point', p: { armR: { a: 95, b: -5 }, armL: { a: 10, b: -8 }, look: 1, yaw: 0.35, expr: 'smug', handR: 'point' } },
-    { name: 'cheer', p: { armL: { a: 135, b: 20 }, armR: { a: 135, b: 20 }, expr: 'happy', squash: -0.05 } },
-    { name: 'shock', p: { armL: { a: 60, b: 40 }, armR: { a: 60, b: 40 }, expr: 'shock', yaw: -0.3, look: -0.6 } },
-  ];
+const PROPS = ['miners_lamp', 'pickaxe', 'shovel', 'match_dip_tray', 'coal_sack'] as const;
+
+export const StyleSheet: React.FC = () => {
+  const ground = 1010;
   return (
-    <AbsoluteFill style={{ backgroundColor: '#14101C' }}>
+    <AbsoluteFill style={{ backgroundColor: PAL.parchment }}>
       <svg width={1920} height={1080} viewBox="0 0 1920 1080">
-        <KitDefs />
-        <SetDefs />
-        <g filter="url(#blur10)">
-          <Study t={0} id="cast" />
-        </g>
-        <rect width={1920} height={1080} fill="#0B0816" opacity={0.35} />
-        {cast.map((c, i) => {
-          const x = 150 + i * 270;
-          const small = c === 'sis' ? 0.68 : 0.82;
+        <ParchmentBase id="stylesheet" o={0.55} />
+        <PlateBorder />
+        {/* header */}
+        <text x={960} y={100} textAnchor="middle" fontFamily={HISTFONT.title} fontWeight={700} fontSize={44} letterSpacing={10} fill={PAL.charcoal}>
+          THE UNSEEN PAST
+        </text>
+        <text x={960} y={134} textAnchor="middle" fontFamily={HISTFONT.label} fontWeight={600} fontSize={20} letterSpacing={8} fill={mix(PAL.bronze, PAL.charcoal, 0.25)}>
+          STYLE SHEET — PALETTE · ENVIRONMENTS · FIGURES · PROPS
+        </text>
+        <path d="M 660 152 L 1260 152" stroke={PAL.bronze} strokeWidth={2} opacity={0.7} />
+
+        {/* palette swatches */}
+        {PALETTE.map((p, i) => (
+          <g key={p.name} transform={`translate(${96 + i * 352} 176)`}>
+            <rect width={220} height={80} rx={6} fill={p.hex} stroke={PAL.charcoal} strokeWidth={2.5} />
+            <text x={0} y={112} fontFamily={HISTFONT.label} fontWeight={700} fontSize={21} letterSpacing={2} fill={PAL.charcoal}>
+              {p.name.toUpperCase()}
+            </text>
+            <text x={0} y={136} fontFamily={HISTFONT.label} fontWeight={400} fontSize={16} letterSpacing={1} fill={mix(PAL.bronze, PAL.charcoal, 0.25)}>
+              {p.hex} — {p.note}
+            </text>
+          </g>
+        ))}
+
+        {/* environment thumbnails: two rows of four */}
+        {ENVIRONMENTS.map((name, i) => {
+          const col = i % 4;
+          const row = Math.floor(i / 4);
+          const tx = 96 + col * 440;
+          const ty = 348 + row * 242;
           return (
-            <g key={c}>
-              <Hero look={LOOKS[c]} pose={P({ x, y: row1 + (0.82 - small) * 340, scale: small, yaw: i % 2 ? -0.35 : 0.35, look: i % 2 ? -0.5 : 0.5, expr: 'happy' })} shadow={0.6} />
-              <Label x={x} y={row1 + 170} text={NAMES[c]} />
+            <g key={name}>
+              <g transform={`translate(${tx} ${ty}) scale(0.185)`}>
+                <Environment name={name} id={`sheet-${name}`} />
+              </g>
+              <rect x={tx} y={ty} width={356} height={200} fill="none" stroke={mix(PAL.charcoal, PAL.parchment, 0.3)} strokeWidth={2} opacity={0.7} />
+              <text x={tx} y={ty + 218} fontFamily={HISTFONT.label} fontWeight={600} fontSize={16} letterSpacing={2} fill={mix(PAL.bronze, PAL.charcoal, 0.25)}>
+                {name.replace('_', ' ').toUpperCase()}
+              </text>
             </g>
           );
         })}
-        {poses.map((q, i) => (
-          <g key={q.name}>
-            <Hero look={LOOKS.pipHood} pose={P({ x: 220 + i * 370, y: row2 - 40, scale: 0.72, ...q.p })} shadow={0.6} />
-            <Label x={220 + i * 370} y={row2 + 110} text={q.name.toUpperCase()} />
+
+        {/* the figures on the baseline */}
+        <path d={`M 130 ${ground} L 1520 ${ground}`} stroke={PAL.charcoal} strokeWidth={2} opacity={0.55} />
+        {FIGS.map((f, i) => (
+          <g key={f.occ}>
+            <Figure occupation={f.occ} pose={f.pose} carry={f.carry} exp={f.pose === 'climbing' ? 'strain' : 'neutral'} x={210 + i * 260} y={figY(ground, f.occ, 0.6)} scale={0.6} t={8} />
+            <text x={210 + i * 260} y={ground + 28} textAnchor="middle" fontFamily={HISTFONT.label} fontWeight={600} fontSize={14} letterSpacing={1.5} fill={mix(PAL.bronze, PAL.charcoal, 0.2)}>
+              {f.occ.replace('_', ' ').toUpperCase()}
+            </text>
           </g>
+        ))}
+
+        {/* the props, on the same ground to the right */}
+        <path d={`M 1560 ${ground} L 1840 ${ground}`} stroke={PAL.charcoal} strokeWidth={2} opacity={0.55} />
+        {PROPS.map((kind, i) => (
+          <Prop key={kind} kind={kind} x={1600 + i * 65} y={ground} s={0.62} />
         ))}
       </svg>
     </AbsoluteFill>

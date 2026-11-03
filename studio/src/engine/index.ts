@@ -1,18 +1,7 @@
-// Everything an episode builds with, in one import: import { Study, Hero, poseAt, Marquee, ... } from '../../engine';
+// Everything an episode builds with, in one import: import { HistScene, Figure, PAL, Documentary, ... } from '../engine';
+// The engine holds the clock (anim, episode), the typefaces (fonts) and the flat-vector historical system
+// (hist/). The old stick-figure modules are gone.
 export * from './anim';
-export * from './rig';
-export * from './props';
-export * from './kit';
-export * from './light';
-export * from './room';
-export * from './furnish';
-export * from './ui';
 export * from './fonts';
 export * from './episode';
-export * from './sets/study';
-export * from './sets/stairwell';
-export * from './sets/classroom';
-export * from './sets/rooftop';
-export * from './sets/kitchen';
-export * from './sets/schematic';
-export * from './sets/bedroom';
+export * from '../hist';

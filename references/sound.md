@@ -1,68 +1,91 @@
-# Sound
+# Audio Standard — Documentary
 
-The genre is dense with sound: every visible action has its own effect, ambience fills every gap, a light music bed
-runs under the cold open and cuts out at the turn. All of it comes from ElevenLabs' sound generation, cached in
-`library/sfx/`, so a clip is paid for once and reused by every later episode.
+Documentary audio is quiet. Voice carries the episode; everything else is texture under it. The most common
+failure in this genre is a mix built like short-form — loud hits, wall-to-wall music — which buries the facts and
+makes the channel sound dishonest even when it isn't.
 
-## Writing the events
+## Voice
 
-One event per visible action, cued to the shot it happens in, so retiming the voice never breaks the sync:
+- Default: **free Microsoft Edge TTS via `edge-tts`, voice `en-GB-RyanNeural`** — neutral British English, which
+  returns word-boundary timings. Those timings are the sync backbone (`words.json`).
+- Optional: ElevenLabs, neutral British English, mature, measured — when `ELEVENLABS_API_KEY` is set and the plan
+  permits commercial use.
+- Target: 140–150 wpm
+- Pauses: 0.8–1.2s at act boundaries; 0.4–0.6s at evidence reveals; 0.2–0.3s natural sentence breaks. Write these
+  into the script as punctuation and verify them in the timings; do not cut pauses to manufacture pace (retired).
+- No "deep movie-trailer voice" — credibility over drama
+- **Pronunciation check required for all historical names and place names.** AI voices mangle exactly the words
+  this channel uses: "palimpsest", "Workhouse" in a compound, place names like "Haworth" (HAY-worth), "Sowerby"
+  (SOW-bi, as in "sur"), "Keighley" (KEETH-lee), "Marylebone" (MAR-lee-bun), "Cholmondeley" (CHUM-lee). For
+  `edge-tts`, respell phonetically in a pronunciation-safe form passed to the synthesizer and keep the correct
+  spelling on screen; for ElevenLabs, use its phoneme/tag conventions. Listen to every proper noun once before
+  the mix.
+
+## SFX
+
+- **Action SFX** retained (tool strikes, footsteps, door) — but quieter than short-form default; target −18 to
+  −22 LUFS during voice. Not every action gets a sound: one per shot maximum, and only when the sound teaches
+  something (the pick striking coal; the brush scraping the flue).
+- **Ambience beds per location:**
+
+| Location | Bed |
+|---|---|
+| Mine | low mechanical hum, distant dripping, timber creak |
+| Factory | rhythmic machinery, muffled voices |
+| Street | distant carts, muffled crowd, wind |
+| Hospital | quiet room tone, distant footsteps |
+| Home | fire crackle, wind at window |
+| Workhouse | shuffling, low murmur, distant bell |
+| Sewer | dripping, slow water, hollow echo |
+| Railway | hammer on iron, gravel, distant whistle |
+
+- Ambience bed at −28 to −32 LUFS under voice. Crossfade beds over 0.5 s at location changes; never cut a bed hard
+  on a cut.
+
+## Music
+
+- **Sparse only** — no wall-to-wall score
+- Use at: act transitions (2–4s), legacy section (final 30–60s)
+- Style: minimal strings, low drone, single piano note
+- Volume: −24 to −28 LUFS under voice
+- Never use music to cover weak narration. If a line needs music to feel like it matters, rewrite the line.
+
+## Mix targets
+
+| Stem | Level |
+|---|---|
+| Master loudness | −14 LUFS integrated |
+| True peak | −1 dBTP |
+| Voice | −16 to −18 LUFS short-term |
+| SFX | −18 to −22 LUFS during voice |
+| Ambience | −28 to −32 LUFS |
+| Music | −24 to −28 LUFS |
+
+Verify with the loudness/consistency script after the mix; if the integrated figure misses −14 by more than ±0.5
+LU, re-master, don't hand-tune stems. Speech is dominant: at no moment in the episode should a stem come within
+3 dB of the voice while a word is being spoken.
+
+## Licensing
+
+- ElevenLabs commercial use must be verified per plan
+- Edge TTS output: free, but the episode still carries the synthetic-content disclosure
+- All SFX and music must be original or licensed
+- No sound may imply a specific recorded historical event if it is a modern reconstruction — a voice actor reading
+  testimony is fine; a sound presented as the actual event is not
+
+## Worked micro-example
+
+One SFX entry, written the way the shot list carries it:
 
 ```json
-"events": [
-  ["S2+6", "glass_tink", 0.5],                    cue, clip, gain (0..1, clips are peak-levelled first)
-  ["S3+2", "whoosh", 0.4, "peak"],                "peak": the clip's loudest moment lands on the cue (whooshes, booms)
-  ["S1", "kitchen_tone", 0.12, "onset", "S6"],    an ambience from S1 cut (with a fade) where S6 starts
-  ["paste+2", "pop", 0.5]                         or cue on a word
-]
+{
+  "shot_id": "S23",
+  "sfx": [
+    {"cue_s": 67.1, "clip": "pick_strike_coal", "gain": 0.45, "alignment": "onset",
+     "note": "lands on the visible impact frame, 2 frames after the word 'coal' ends"}
+  ]
+}
 ```
 
-- **A hit that illustrates a word lands in the pause after it, never on it.** The copy-paste run first put each
-  paste's pop on the word "Paste" and covered it; moved four to six frames later, into the gap, the word reads and
-  the pop lands as the answer to it. Move the picture with it (the copy appears with its sound).
-- **Align by the attack, not the file start:** `onset` (default) finds where the clip actually starts sounding. A hit
-  on the frame of the visible impact; a whoosh with `peak` on the frame of the fastest movement.
-- **Layers for each beat:** the action (a step, a catch), the power (its signature sound every time it's used), the
-  reaction (a laugh, a gasp, a sparkle), and the room (an ambience per location, cut at the location change).
-- **The power's sound** is the episode's signature: the same clip every time, so the viewer hears the rule.
-- **The turn** gets a low hit (drone or boom) on its first frame, the music cut on the same frame, and one detail
-  sound repeated (bulbs dying, lights switching off) through `repeats`.
-- **Silence is a tool:** cut the music a beat before the title boom or the turn so the hit lands in a gap.
-
-## Prompts that work
-
-Describe the physical source, the material and the length: "a ceramic coffee mug smashing on a wooden floor, shards
-scattering and liquid splash" beats "smash sound". Add "cartoon" for exaggerated comedy sounds (a tiptoe, dizzy
-birds), "short" for one-shots, "no voices" for ambiences. Durations: 0.5 to 1.6 s for hits, 2 to 12 s for
-ambiences, the episode's length for the music bed ("playful quirky cartoon background music, pizzicato strings,
-glockenspiel and soft bass, light and curious, 110 bpm, no vocals").
-
-Check the library first (`python <skill>/scripts/sfx.py <slug> --dry` lists what's cached): reuse a clip by giving
-it the same name, prompt and length.
-
-## Levels
-
-`sfx.py` measures the voice and each stem and sets their volumes in the mix:
-
-- effects stem: `sfx_lu` LU against the voice, integrated. The default, +1.5, is about where the approved proof clip
-  sat (+1.9); the copy-paste run settled at -1.5 after the mix check. The stem is sparse, so its gated loudness reads
-  high: these numbers sound denser than they look.
-- music bed: `music_lu` (default -9.5) LU against the voice.
-- The whole effects stem is levelled to `sfx_lu`, so lowering one event's gain makes the others louder. Lower events
-  to change the balance inside the stem; lower `sfx_lu` to give the voice more room overall.
-- The final mix is brought to -14 LUFS with true peaks under -1 dBTP by `master.py`.
-
-Then run `mixcheck.py`: it lists the spoken moments where effects or music come within 3 dB of the voice. Fix the
-words that matter (the fact, the last line) by moving a hit into the pause after the word or lowering it; a title
-boom or a drone on the turn can stay. The proof clip had 30 such moments at 0 dB; copy-paste shipped with 14.
-
-## Costs
-
-The voice's exact cost is in the account's generation history, which `voice.py` reads: the 356-character copy-paste
-take cost 78 credits (about 0.22 a character on this account; the proof clip's 280-character takes cost 61 and 62).
-By 29 Oct 2026 the same voice and model cost about 0.44 a character (the 358-character preview-minute take: 158), so
-count the characters and re-check the rate before the call.
-Sound clips don't appear in the history, so `sfx.py` reads the account counter before and after, and the counter can
-lag: re-read it before you report a number, or check the usage page. The copy-paste run's 12 new clips (13.5 s in
-all) moved the counter by 74 credits. The proof clip's sound cost more (775 credits for five clips including 19 s of
-ambience), so long ambiences are where the cost is: reuse `room_tone` and `roof_wind` from the library.
+And the balance check that must hold underneath it: the strike peaks at −20 LUFS short-term while the voice sits
+at −17 — audible, subordinate, and not covering the word.

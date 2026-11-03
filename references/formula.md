@@ -1,89 +1,105 @@
-# The script: the seven-beat What If formula
+# Five-Act Historical Documentary Formula
 
-Decoded on 21 Oct 2026 from five scripts across four channels that broke out with this format in October 2026
-(Ifverse, FunNotSoFun, IFinity, Could've Been Tales). The full episodes run 7 to 10 minutes and hit all seven beats;
-the skill makes a 15 to 25 second episode, which is the cold open of one: beats 1 to 4 in full, 5 to 7 folded into
-the last line.
+Total runtime: 300 seconds. Target word count: 700–850 words at 140–150 wpm (≈2.4 words per second). Write to the
+per-act word budgets below — they are how the acts hit their screen times without voice-tightening tricks (retired).
 
-## The seven beats
+## The acts
 
-1. **Cold open in the middle of the action.** A flash-forward to the climax, or three or four quick demos of the
-   power.
-2. **The premise and its rules.** What changed overnight, and the rules it comes with.
-3. **The fun part.** Escalating wins in everyday life.
-4. **The not-so-fun part.** The cost, with real science and real numbers woven into the story ("That's real.").
-5. **Someone powerful notices.** A man in a suit, robbers, a government.
-6. **A moral choice with family at stake,** usually a little sister.
-7. **Cliffhanger.** "Part 1 of 2", a question for the comments, sometimes an "is any of this real?" section and
-   sourced science notes in the description.
+### Act 1 — Cold Open (0:00–0:20) — ~48 words (40–55)
 
-Recurring cast: you (second person), a best friend, a little sister, mum. In our cast: Pip is "you", Mo is the best
-friend, and `sis`, `mom` and `suit` are on the rig for beats 5 and 6.
+**Purpose:** Hook with a documented danger, contradiction, or unsettling consequence.
 
-## The 15 to 25 second shape
+**Rules:**
+- No channel intro, no logo, no "welcome back"
+- Start mid-action or mid-fact
+- Every claim must carry a source ID `[S1]` etc.
+- 6–8 visual cuts in 20 seconds
 
-| Beat | Seconds | What it does | Example (rewind) |
-|---|---|---|---|
-| 1. Cold open | 0 to 11 | Three quick demos: a small everyday problem, the power, the win. The power's word is said every time. | "You knock your coffee off the desk. Rewind. You catch it." x3 |
-| 2. Premise | 11 to 15 | The title card says it: "What if you could ...?", plus one rule. | "What if you could rewind ten seconds, any time you want?" |
-| 3. Fun | 1 to 2 s | One line, or one more escalation. | "Sounds amazing." |
-| 4 to 7. The turn | last 2 to 6 s | The cost, ideally one real fact with a number and "That's real.", then a line that leaves a question open. | "It's about to ruin your life." |
+**Example opening line:** "In 1875, a twelve-year-old boy named George Brewster was sent into a chimney in
+Cambridge. He did not come out."
 
-A longer cut (40 to 60 s) adds beat 4 properly (the fact, then its consequence on screen), the suit noticing (5)
-and the sister in danger (6), and ends on "Part 1".
+### Act 2 — Context (0:20–1:00) — ~95 words (80–110)
 
-## Writing rules
+**Purpose:** Establish person, place, period, and the central question the episode answers.
 
-- **Second person, present tense, short sentences.** Three to eight words. "Copy a cookie. Paste." beats "Imagine if
-  you were able to duplicate a cookie."
-- **Every line is a picture.** Each demo has to read in one shot with no text on screen: a mug, a stair, a quiz, a
-  cookie, a friend. If a line needs a caption to be understood, rewrite the line.
-- **The power has a word, a sound and a look.** "Rewind" plus tape whirr plus a stopwatch counting back; "Copy...
-  Paste" plus a selection box plus a pop. Say the word in every demo, so the viewer learns the grammar by the third.
-- **Escalate the demos.** Small and selfish, then useful, then a little uncanny (a cookie, the homework, your best
-  friend). The third demo should make the viewer slightly uneasy: it sets up the turn.
-- **One real fact in the turn, with a number, checked.** Work the arithmetic, write it in the episode's `science`
-  field with its source, and only then put it in the script. "That's real." goes straight after it. Never invent a
-  number, never round one into a different claim.
-- **End on a question or a threat,** never a resolution: "So where are yours coming from?", "It's about to ruin
-  your life."
-- **Length:** 45 to 65 words lands at 15 to 25 seconds after voice.py tightens the pauses (about 2.7 words a
-  second). Count before you call the voice: every character costs credits.
-- **The title card** is the premise, in capitals: line 1 `WHAT IF YOU COULD`, line 2 the power in four words or
-  fewer with a question mark. One word of line 2 can pulse as the accent (`10`, `ANYTHING`).
+**Rules:**
+- Introduce exactly ONE central question
+- Use a composite character only if explicitly flagged ("reconstructed composite")
+- 10–12 visual cuts
+- End with the question stated plainly
+
+**Example question:** "Why did children keep climbing chimneys for nearly a century after Britain first tried to
+stop them?"
+
+### Act 3 — How It Worked (1:00–2:30) — ~220 words (190–250)
+
+**Purpose:** Make the process understandable through visual explanation. This is the longest act and the visual
+centre of the episode.
+
+**Rules:**
+- Diagrams, tool close-ups, environment shots
+- 25–30 visual cuts
+- Every mechanical or tool animation must be source-backed (each shot's `source_id` points at evidence for the
+  mechanism, not just the scene)
+- No lists — explain as a sequence of actions: "The flue narrows here. The boy scrapes the soot from his knees and
+  climbs on."
+
+### Act 4 — The Hidden Cost (2:30–3:45) — ~180 words (150–210)
+
+**Purpose:** Reveal practical risks, incentives, and consequences with evidence.
+
+**Rules:**
+- Include at least one primary-source quotation or statistic on screen (the document-highlight shot)
+- 20–25 visual cuts
+- Distinguish documented consequence from reconstruction
+- Never invent quotations — paraphrase unless verbatim source exists
+
+### Act 5 — Turning Point & Legacy (3:45–5:00) — ~180 words (150–210)
+
+**Purpose:** What changed, what didn't, and why this still matters.
+
+**Rules:**
+- Cite the specific reform, law, invention, or resistance event (name and year, not "eventually the law changed")
+- Acknowledge delay or failure where documented — reform usually lagged the harm by decades
+- 20–25 visual cuts
+- End on a historical consequence, not a moral lecture
+
+Word budgets sum to ~723; the band 700–850 gives room for the voice's natural pace. Count before the voice call —
+800 words at 145 wpm is 331 s, which will not fit 300 s of picture.
+
+## Storytelling rules (non-negotiable)
+
+1. Open with the subject, not the channel
+2. Introduce a new fact, reversal, or visual explanation every 20–30 seconds
+3. Use emotional stakes without inventing private thoughts — no "he must have felt", no inner monologue
+4. Never fabricate direct quotations
+5. Distinguish consensus, disputed claims, and reconstruction — say "the records suggest" when they only suggest
+6. End with consequence, not platitude
 
 ## Choosing a topic
 
-- An everyday power with clear rules and a hidden cost works best: time (rewind, pause, skip), copies, senses (hear
-  thoughts, see an hour ahead), body (never sleep, 10x reaction), money, luck.
-- The cost should come from real science (energy, biology, physics, economics), so beat 4 can teach something true.
-- Don't remake a channel's episode: search YouTube for the premise first, and if a What If channel already has that
-  exact title, pick a different power or a different rule. Most everyday powers have been done somewhere (copy-paste
-  turned up a comedy short and a "Copy Powers" episode); the story, the rule and the turn are what make it ours.
-  The formula is shared; the stories are ours.
-- No real people, no brands, no famous characters, nothing that resembles one.
+- Dangerous jobs and hidden human costs: chimney sweeps, match workers, miners, sewer hunters, matchgirls, mill
+  workers, railway navvies, radium dial painters, workhouse labour, tanners, mudlarks, knocker-uppers.
+- The episode needs a turning point that is *documented*: an act of parliament, a strike, an invention, a
+  prosecution. A topic with no recorded consequence cannot fill Act 5.
+- Do not remake another channel's episode. The subject is history (shared); the framing, the central question and
+  the composite characters are ours. Search first; if a major channel has the identical episode with the identical
+  question, change the question.
 
-## episode.json: the script part
+## Worked micro-example
 
-The copy-paste example (`studio/src/episodes/copy-paste/episode.json`), 61 words, 23 s:
+One act-1 shot row and its citation, end to end:
 
 ```json
-"topic": "What if you could copy and paste anything?",
-"title": ["WHAT IF YOU COULD", "COPY AND PASTE ANYTHING?"],
-"script": [
-  {"beat": "1 cold open, demo 1 (small and selfish)", "text": "Copy a cookie. Paste. Free cookies, forever."},
-  {"beat": "1 cold open, demo 2 (useful)", "text": "Copy your homework. Paste. Done."},
-  {"beat": "1 cold open, demo 3 (a little uncanny)", "text": "Copy your best friend. Paste. Okay, that's weird."},
-  {"beat": "2 the premise (title card)", "text": "What if you could copy and paste anything?"},
-  {"beat": "4 the turn: the cost, one real fact", "text": "One catch: a copy can't come from nothing. One cookie, made from pure energy, needs every power plant on Earth running for over ten minutes. That's real."},
-  {"beat": "5-7 folded into a question", "text": "So where are yours coming from?"}
-],
-"science": [
-  {"claim": "One cookie made from pure energy needs every power plant on Earth running for over ten minutes.",
-   "working": "A 30 g cookie: E = mc^2 = 2.70e15 J. World electricity, 29,925 TWh in 2023 = 3.4e12 W on average. 2.70e15 / 3.4e12 = about 13 minutes. Over ten minutes holds above about 24 g; the schematic states the 30 g.",
-   "source": "mass-energy equivalence; Ember, Global Electricity Review 2024"}
-]
+{
+  "shot_id": "S03", "start_s": 6.5, "end_s": 9.0, "duration_s": 2.5,
+  "act": 1, "visual_type": "new_scene",
+  "description": "Narrow chimney flue interior, soot falling; small climbing silhouette stops at a bend above",
+  "characters": ["climbing_boy_composite"], "environment": "chimney_flue",
+  "camera_move": "slow_push", "sfx": ["soot_fall", "brick_scrape"], "source_id": "S1"
+}
 ```
 
-`voice.py` joins the beats' text with spaces and sends it as one take, so the read flows; the beats are for you and
-for the storyboard.
+Narration under it: `"In 1875, a twelve-year-old boy named George Brewster was sent into a chimney in Cambridge [S1]."`
+Citation: `{"text_span": "In 1875, a twelve-year-old boy named George Brewster", "source_id": "S1"}`. One claim,
+one source, one shot.

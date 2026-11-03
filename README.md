@@ -1,133 +1,130 @@
-# What If animation: a free skill for Claude Code and OpenCode
+# The Unseen Past — animated historical documentary pipeline
 
-Type one line, "What if you could rewind 10 seconds?", and get a finished 15-25 second animated episode in the
-dusk-lit stick-figure style of the "What If" channels that took off on YouTube in October 2026.
+A Claude skill that turns one topic line into a finished **5-minute animated historical documentary episode** for
+"The Unseen Past" — a faceless YouTube channel covering dangerous jobs, forgotten workers, and the hidden human
+costs of history: chimney sweeps, match girls, miners, sewer hunters, workhouse labour.
 
-Every frame is drawn in code: the AI writes the scenes as SVG and Remotion renders them. The voice and the sound
-effects come from ElevenLabs. No image model, no video model, no drawing. It runs in Claude Code, or for free in
-OpenCode with a free model. Made by [FreshStack](https://freshstack.ai).
+Every frame is drawn in code: the AI writes each scene as SVG and Remotion renders it — flat-vector historical
+illustration on a parchment base, block-silhouette figures in period-accurate clothing, chiaroscuro lighting from
+vector gradients, a five-colour palette. The voiceover is word-synced: free Microsoft Edge TTS
+(`en-GB-RyanNeural`) by default, ElevenLabs optional. No image model, no video model, no stock footage.
 
-## What it does
+## Output per episode
 
-1. **Writes the script** on the seven-beat What If formula (decoded from five scripts across four channels): a cold
-   open of quick demos, the premise as a title card, the fun, and a turn built on one real, checked fact.
-2. **Voices it** with ElevenLabs, with word timings, and tightens the pauses to the genre's pace.
-3. **Lays out a shot list** on the words, at the genre's pace (about 27 cuts a minute in the opening and up).
-4. **Renders a storyboard** of one still per shot, before any animation.
-5. **Checks its own stills** against an 11-point checklist and fixes what reads wrong.
-6. **Animates** an original cast on one rig, in rooms drawn in real perspective, lit by their own lamps and windows.
-7. **Generates and syncs the sound:** an effect on every action, lined up by its attack, ambience per place, a
-   music bed, levels set against the voice.
-8. **Masters** the episode to -14 LUFS and reports what it cost.
+- 300-second master MP4 (1920×1080, 30 fps, −14 LUFS, −1 dBTP)
+- Word-synced voiceover + word-boundary timings
+- 80–100 code-drawn vector scenes (visual change every 2–3 seconds)
+- Two 1280×720 thumbnail concepts
+- YouTube metadata: title, description with sources, `chapters.txt`, tags
 
-Why the character never changes: it isn't generated, it's a rig in code. The same function draws Pip in every
-shot, so there is nothing to drift.
+## Architecture
 
-## What you need
+```
+            ┌──────────────────────────── pipeline (gated, in order) ────────────────────────────┐
+            │                                                                                     │
+ topic ──▶ STAGE 1 ──▶ STAGE 2 ──▶ STAGE 3 ──▶ STAGE 4 ──▶ STAGE 5 ──▶ STAGE 6 ──▶ STAGE 7
+           Research    Script     Shot list   Storyboard   Animation   Thumbnail   Metadata
+            │            │            │             │             │            │            │
+            ▼            ▼            ▼             ▼             ▼            ▼            ▼
+       research.json  script.json  shots.json  storyboard.json  final.mp4  thumbnail-*.png  metadata
+            │            │            │             │                          ▲
+            └──── [S#] citations ─────┘      stills per shot                    │
+                                                  ▲                            │
+                                     scripts/stills.mjs ──▶ out/<slug>/board/ │
+                                                          (board.py sheet)    │
+                                                              │               │
+                                                     GATE 1: historical       │
+                                                     GATE 2: 11-point visual ─┘
 
-- [Claude Code](https://claude.com/claude-code), or [OpenCode](https://opencode.ai) with a free model (see
-  [Use it in OpenCode](#use-it-in-opencode-with-a-free-model))
-- Node 18 or newer, ffmpeg (with ffprobe), Python 3.9+ with `numpy` and `Pillow`
-- An [ElevenLabs](https://elevenlabs.io) API key in your environment or a `.env` file as `ELEVENLABS_API_KEY`.
-  The copy-paste episode cost 152 credits: 78 for the voice and 74 for 12 new sound effects. It reused 9 clips from
-  the starter library that ships in `studio/library/sfx/`, and every clip you generate joins it for the next
-  episode. Later runs cost 170 to 242 credits. ElevenLabs' free plan (10,000 credits a month when we checked, in
-  October 2026) covers about 40 episodes, but it's for non-commercial use and asks you to credit ElevenLabs, so
-  check its terms before you monetise.
-
-## Install in Claude Code
-
-Clone it into your skills folder, then set up the studio once:
-
-```bash
-git clone https://github.com/kelano86/what-if-animation ~/.claude/skills/what-if-animation
-cp -r ~/.claude/skills/what-if-animation/studio ./what-if-studio
-cd what-if-studio && npm install
+ studio/src/engine/   kept core: episode.tsx (word-sync timeline), anim.ts (easing), fonts.ts
+ studio/src/hist/     flat-vector system: palette (PAL + mix()), shot.ts, ParchmentBase,
+                      figures (block-silhouette, period clothing), environments (mine tunnel,
+                      factory floor, Victorian street, workhouse, sewer, hospital ward,
+                      medieval workshop, railway), vector-gradient lighting, documents/maps
+                      animators, thumbnail compositor
+ schemas/             JSON contracts for every stage hand-off
+ pipeline/            one prompt per stage + validators (research / script / shots)
 ```
 
-Then, in Claude Code, from that folder:
+## Pipeline stages
 
-> Make a What If episode: what if you could pause everyone but you?
+1. **Research** — produce `research.json`: ≥2 primary sources, exact period and place, documented facts vs
+   reconstruction, asset licenses. Validator blocks on failure.
+2. **Script** — `script.json`: five acts (Cold Open / Context / How It Worked / Hidden Cost / Turning Point &
+   Legacy), 700–850 words at 140–150 wpm, every claim cited `[S#]`.
+3. **Shot list** — `shots.json`: 80–100 shots, every shot ≤4.0 s, durations summing to 300 s.
+4. **Storyboard** — one still per shot (`scripts/stills.mjs`); historical gate (8 checks) and visual gate
+   (11-point checklist) must pass before anything animates.
+5. **Animation** — voice (word-synced), SFX, ambience beds, sparse music, mix to −14 LUFS, master MP4.
+6. **Thumbnail** — two 1280×720 concepts, different concept types, ≤4 words each.
+7. **Metadata** — title ≤70 chars, description with sources and synthetic-content disclosure, chapters, tags.
 
-Claude follows `SKILL.md`: script, voice, shot list, storyboard (you'll see it before anything is animated), self-
-check, animation, sound, master. You get `out/<slug>/<slug>-final.mp4` and `out/<slug>/storyboard.jpg`.
+## Schemas
 
-To see the examples first: `npx remotion studio src/index.ts` and open `Rewind` (the proof clip: three demos, each
-undone by playing the shot backwards) or `CopyPaste` (the skill's first full run). Both render straight away.
+The stage hand-offs are JSON contracts under `schemas/`:
 
-## Use it in OpenCode, with a free model
-
-[OpenCode](https://opencode.ai) is a free, open-source coding agent. In October 2026 it offers GLM-5.3-Flash Free at
-no cost, for a limited time, with no account or key. With this skill, that model made a full episode from one line:
-28 minutes, one render, nothing typed in between, and $0 for the model (the voice and sound still use your
-ElevenLabs credits).
-
-1. Install the tools above, then OpenCode: `npm install -g opencode-ai`
-2. Make a folder for your episodes, put the skill in it under `.claude/skills/`, and add the `/what-if` command
-   (OpenCode doesn't list skills when you type `/`, so the command loads it for you).
-
-   Windows (PowerShell):
-
-   ```powershell
-   mkdir what-if; cd what-if
-   git clone https://github.com/kelano86/what-if-animation .claude/skills/what-if-animation
-   mkdir .opencode/commands
-   copy .claude/skills/what-if-animation/opencode/commands/what-if.md .opencode/commands/
-   ```
-
-   Mac or Linux:
-
-   ```bash
-   mkdir what-if && cd what-if
-   git clone https://github.com/kelano86/what-if-animation .claude/skills/what-if-animation
-   mkdir -p .opencode/commands && cp .claude/skills/what-if-animation/opencode/commands/what-if.md .opencode/commands/
-   ```
-
-   No git? Download the ZIP from GitHub and unzip it into `.claude/skills/` (the folder's name doesn't matter), then
-   copy `opencode/commands/what-if.md` from it into `.opencode/commands/`.
-3. Put your key in a file called `.env` in the same folder, one line: `ELEVENLABS_API_KEY=your-key`
-4. Start OpenCode **from inside that folder**: `cd` into it (on Windows you can right-click the folder and choose
-   Open in Terminal), then type `opencode`. Started anywhere else, it won't find the skill or the command.
-5. Type `/models`, choose GLM-5.3-Flash Free, and press Ctrl+T until the reasoning level reads high.
-6. Type `/what-if What if you could pause everyone but you?` and leave it running. The first run copies the studio
-   into `what-if-studio/` and installs it, which adds a few minutes.
-
-Tips for the free model:
-
-- One session per episode. An episode can fill most of its 200K context; start fresh for the next one.
-- Search YouTube for your premise yourself. The free model's search can miss episodes that already exist, and the
-  skill wants an original title.
-- Open the source of the episode's fact (`science` in its `episode.json`) before you post.
-
-## What's in the folder
-
-| Path | What |
+| Schema | Defines |
 |---|---|
-| `SKILL.md` | The pipeline the AI follows |
-| `references/` | The formula, the measured look and checklists, the building-block catalogue, sound, traps |
-| `studio/` | The Remotion project: the engine (rig, sets, light, UI, the episode engine) and two example episodes |
-| `scripts/` | voice, plan, stills, board, sfx, mixcheck, motiongrid, master |
-| `opencode/commands/what-if.md` | The `/what-if` command for OpenCode |
+| `research.schema.json` | Sources, facts, reconstruction flags, licenses |
+| `script.schema.json` | Five acts, narration, citations, on-screen text |
+| `shots.schema.json` | Shot rows (id, times, act, visual type, environment, camera) |
+| `storyboard.schema.json` | Per-frame still paths + 11 boolean visual checks |
+| `episode.schema.json` | The render contract (300 s, 30 fps, 1920×1080, audio paths) |
+
+## Quickstart
+
+Needs Node 18+, ffmpeg/ffprobe on the PATH, Python 3.9+ with `numpy`.
+
+```bash
+git clone <this-repo>
+cp -r <this-repo>/studio ./unseenpast-studio && cd unseenpast-studio && npm install
+pip install edge-tts
+```
+
+Then, in Claude Code (or any agent that reads `SKILL.md`), from the studio folder:
+
+> Make a history documentary video about Victorian match girls.
+
+The skill runs the gated pipeline above. The default voice costs nothing (`edge-tts`, en-GB-RyanNeural, with word
+timings); set `ELEVENLABS_API_KEY` in the environment or a `.env` above the studio only if you want ElevenLabs —
+keys by name only, never hardcoded.
+
+You get `out/<slug>/final.mp4`, `out/<slug>/storyboard.jpg`, `out/<slug>/thumbnail-1.png` and `-2.png`,
+`chapters.txt`, and the metadata package.
 
 ## The rules it follows
 
-- Original characters only: never a channel's hero, nothing that resembles a famous cartoon character.
-- Original stories: the formula is shared, the episodes aren't anyone's.
-- It never claims the viral channels are made with Claude or any other tool; nobody has said how they're made.
-- Every fact in a script is worked out and sourced before it's voiced.
+- Research gate before any scripting: every material claim cited to a primary or archive source.
+- Composite characters only when flagged, in script and on screen; no invented quotations.
+- Original figures and stories; nothing resembling a famous character.
+- Storyboard before animation; both gates block the render.
+- It never claims real channels use AI tools.
+- Every upload carries the synthetic-content disclosure; descriptions list sources and state that visuals are
+  illustrated reconstruction.
 
-## Honest limits
+## Screenshot placeholder
 
-- Walk cycles and acting are simple next to a hand-animated channel; the look carries it.
-- Painted, textured styles (the ink-and-paper explainers) aren't realistic in pure code; they need an image model.
-- It's not one prompt: the storyboard step is where the episode gets good. Look at it.
+<!-- TODO: replace with a real frame from the pilot episode
+     (pilot: "Why Victorian Children Were Forced to Climb Chimneys").
+     Suggested: a 3-frame strip — act-1 flue shot, act-3 tool insert, act-5 reform document. -->
 
-## Licences
+![Episode frame placeholder](docs/screenshot-placeholder.png)
 
-- Fonts load from Google Fonts at render time (Bricolage Grotesque, Fragment Mono, Kalam: SIL Open Font License).
-  To use your own title face, put it in `studio/public/fonts/` and set `titleFont` in `src/studio.config.ts`.
-- [Remotion](https://www.remotion.dev/license) is free for individuals and for companies of up to three people;
-  larger companies need a Remotion company licence.
-- Voices and sound effects are generated by your ElevenLabs account under its terms. The example episodes' audio
-  and the starter clips in `studio/library/sfx/` were generated on a paid plan.
-- The code is free to use, change and share.
+## Repository layout
+
+| Path | What |
+|---|---|
+| `SKILL.md` | The pipeline the agent follows |
+| `references/` | Research, formula, pacing, style, palette, sound, self-check, thumbnails, kit, traps |
+| `schemas/` | The five JSON contracts |
+| `pipeline/` | Stage prompts and validators |
+| `studio/` | The Remotion project (engine + hist library) |
+| `scripts/` | voice, plan, stills, board, sfx, mixcheck, motiongrid, master |
+
+## License
+
+The code is free to use, change and share. Fonts load from Google Fonts (SIL Open Font License).
+[Remotion](https://www.remotion.dev/license) is free for individuals and companies of up to three people; larger
+teams need a Remotion company licence. Edge TTS output is free under its terms; ElevenLabs output is governed by
+your account's plan, including its commercial-use terms. Historical sources and any borrowed assets are licensed
+per-asset in each episode's `research.json`.
